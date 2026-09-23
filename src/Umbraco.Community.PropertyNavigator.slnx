@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Umbraco.Community.PropertyNavigator.TestSite/Umbraco.Community.PropertyNavigator.TestSite.csproj" />
+  <Project Path="Umbraco.Community.PropertyNavigator/Umbraco.Community.PropertyNavigator.csproj" />
+</Solution>

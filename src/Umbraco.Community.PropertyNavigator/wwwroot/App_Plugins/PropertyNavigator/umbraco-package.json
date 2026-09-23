@@ -1,0 +1,20 @@
+{
+  "$schema": "../../umbraco-package-schema.json",
+  "id": "PropertyNavigator",
+  "name": "Property Navigator",
+  "version": "0.1.0",
+  "extensions": [
+    {
+      "type": "workspaceFooterApp",
+      "alias": "propertyNavigation.workspaceFooterApp.dropdown",
+      "name": "Property Navigator - Content View Dropdown",
+      "element": "/App_Plugins/PropertyNavigator/property-navigator-dropdown.js",
+      "conditions": [
+        {
+          "alias": "Umb.Condition.WorkspaceAlias",
+          "match": "Umb.Workspace.Document"
+        }
+      ]
+    }
+  ]
+}

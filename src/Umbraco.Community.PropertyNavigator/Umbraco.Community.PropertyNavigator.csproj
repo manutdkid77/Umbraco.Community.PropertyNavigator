@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <!-- Serve wwwroot/App_Plugins/... at /App_Plugins/... (not /_content/<id>/...) -->
+    <StaticWebAssetBasePath>/</StaticWebAssetBasePath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Product>Umbraco.Community.PropertyNavigator</Product>
+    <PackageId>Umbraco.Community.PropertyNavigator</PackageId>
+    <Title>Property Navigator</Title>
+    <Description>Find and jump to any field on an Umbraco content node. Click the active Content view for a dropdown of every field (like v13); type to filter, click to jump.</Description>
+    <!-- "umbraco-marketplace" is what gets the package listed on the Umbraco Marketplace -->
+    <PackageTags>umbraco;umbraco-marketplace;umbraco-cms;backoffice;navigation</PackageTags>
+    <Authors>Nathaniel Nunes</Authors>
+    <Copyright>$([System.DateTime]::UtcNow.ToString(`yyyy`)) © Nathaniel Nunes</Copyright>
+    <PackageProjectUrl>https://github.com/manutdkid77/Umbraco.Community.PropertyNavigator</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/manutdkid77/Umbraco.Community.PropertyNavigator</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageReadmeFile>README_nuget.md</PackageReadmeFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <!-- Central package management - versions live in src/Directory.Packages.props -->
+  <ItemGroup>
+    <PackageReference Include="Umbraco.Cms.Api.Common" />
+    <PackageReference Include="Umbraco.Cms.Api.Management" />
+    <PackageReference Include="Umbraco.Cms.Web.Common" />
+    <PackageReference Include="Umbraco.Cms.Web.Website" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\docs\README_nuget.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>

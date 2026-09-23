@@ -1,0 +1,29 @@
+name: Release Package
+
+# Runs when a version tag is pushed, e.g. `git tag 1.0.0 && git push origin 1.0.0`.
+# Needs a NUGET_API_KEY repository secret.
+
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+      - '[0-9]+.[0-9]+.[0-9]+-*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Build & Pack
+        run: dotnet pack src/Umbraco.Community.PropertyNavigator/Umbraco.Community.PropertyNavigator.csproj -c Release -o artifacts /p:Version=${{ github.ref_name }}
+
+      - name: Push to NuGet
+        run: dotnet nuget push "artifacts/*.nupkg" -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json --skip-duplicate

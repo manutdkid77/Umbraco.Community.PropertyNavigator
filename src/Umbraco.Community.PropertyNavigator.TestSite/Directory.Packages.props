@@ -1,0 +1,6 @@
+<Project>
+  <!-- Opt the test site out of src/Directory.Packages.props: it keeps the `dotnet new umbraco` inline versions. -->
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+</Project>
