@@ -338,8 +338,6 @@ export class PropertyNavigatorBase extends UmbLitElement {
         ? "Filter by name…"
         : `Filter by ${fields.slice(0, -1).join(", ")} or ${fields.at(-1)}…`;
     return html`
-      <!-- type="text", not "search": Chrome adds its own clear button to search inputs (inside uui-input's
-           shadow DOM, so it can't be hidden), which doubled up with ours. -->
       <uui-input
         type="text"
         label="Filter properties"
@@ -348,17 +346,17 @@ export class PropertyNavigatorBase extends UmbLitElement {
         @input=${this.#onSearch}
         style="width: 100%; margin-bottom: var(--uui-size-6);"
       >
+        <uui-icon name="search" slot="prepend" class="search-icon"></uui-icon>
         ${this._filter
-          ? html`<button
+          ? html`<uui-button
               slot="append"
-              type="button"
-              class="clear-btn"
-              title="Clear filter"
-              aria-label="Clear filter"
+              compact
+              label="Clear filter"
+              style="height: 100%;"
               @click=${this.#clearFilter}
             >
-              ✕
-            </button>`
+              <uui-icon name="remove"></uui-icon>
+            </uui-button>`
           : ""}
       </uui-input>
     `;
@@ -376,30 +374,28 @@ export class PropertyNavigatorBase extends UmbLitElement {
             (g) => html`
               <div class="tab-group">
                 <h4 class="tab-heading">${g.label}</h4>
-                <ul>
-                  ${g.items.map(
-                    (p) => html`
-                      <li>
-                        <button
-                          type="button"
-                          @click=${() => this.#goToProperty(p)}
-                        >
-                          <span class="prop-line">
-                            <strong>${this.#highlight(p.name)}</strong>
-                            ${showAliases
-                              ? html`— <code>${this.#highlight(p.alias)}</code>`
-                              : ""}
-                          </span>
-                          ${showDescriptions && p.description
-                            ? html`<span class="prop-desc"
-                                >${this.#highlight(p.description)}</span
-                              >`
+                ${g.items.map(
+                  (p) => html`
+                    <uui-menu-item
+                      label=${p.name}
+                      @click-label=${() => this.#goToProperty(p)}
+                    >
+                      <span slot="label" class="prop-label">
+                        <span class="prop-line">
+                          <strong>${this.#highlight(p.name)}</strong>
+                          ${showAliases
+                            ? html`— <code>${this.#highlight(p.alias)}</code>`
                             : ""}
-                        </button>
-                      </li>
-                    `,
-                  )}
-                </ul>
+                        </span>
+                        ${showDescriptions && p.description
+                          ? html`<span class="prop-desc"
+                              >${this.#highlight(p.description)}</span
+                            >`
+                          : ""}
+                      </span>
+                    </uui-menu-item>
+                  `,
+                )}
               </div>
             `,
           )}
@@ -420,26 +416,16 @@ export class PropertyNavigatorBase extends UmbLitElement {
       letter-spacing: 0.05em;
       color: var(--uui-color-text-alt);
     }
-    ul {
-      list-style: none;
-      margin: 0;
-      padding: 0;
+    uui-menu-item {
+      --uui-menu-item-flat-structure: 1; /* no caret column: the list is flat */
     }
-    li {
-      border-bottom: 1px solid var(--uui-color-divider);
-    }
-    li button {
-      width: 100%;
-      text-align: left;
-      cursor: pointer;
-      font: inherit;
-      color: inherit;
-      background: none;
-      border: none;
-      padding: var(--uui-size-3) var(--uui-size-2);
-    }
-    li button:hover {
-      background: var(--uui-color-surface-alt);
+    /* uui-menu-item keeps its label on one line; let long names and descriptions wrap instead. */
+    .prop-label {
+      display: block;
+      min-width: 0;
+      white-space: normal;
+      overflow-wrap: anywhere; /* long URLs in descriptions would otherwise be clipped by the item */
+      padding: var(--uui-size-2) 0;
     }
     .prop-desc {
       display: block;
@@ -457,21 +443,9 @@ export class PropertyNavigatorBase extends UmbLitElement {
       border-radius: 2px;
       padding: 0 1px;
     }
-    .clear-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-      padding: 0 var(--uui-size-3);
-      cursor: pointer;
-      border: none;
-      background: none;
-      font-size: var(--uui-size-4);
-      line-height: 1;
+    .search-icon {
+      padding-left: var(--uui-size-space-3);
       color: var(--uui-color-text-alt);
-    }
-    .clear-btn:hover {
-      color: var(--uui-color-text);
     }
   `;
 }
