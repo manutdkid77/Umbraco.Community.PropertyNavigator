@@ -254,14 +254,19 @@ export class PropertyNavigatorBase extends UmbLitElement {
         scrollToTarget();
         setTimeout(scrollToTarget, 250);
         setTimeout(scrollToTarget, 600);
-        // Flash once the smooth scroll has mostly settled.
-        if (this._config.highlightField) setTimeout(() => flashProperty(el), 350);
+        // The ring rides along with the field, so on the same tab show it straight away; after a tab switch,
+        // wait for the fields to finish laying out.
+        if (this._config.highlightField) {
+          setTimeout(() => flashProperty(el), onTargetTab ? 0 : 350);
+        }
         return;
       }
       if (tries++ < 40) setTimeout(tick, 50);
       else console.warn("[PropNav] could not find", selector);
     };
-    setTimeout(tick, 50);
+    // Already on the tab: the field is there now. Otherwise give the tab a moment to start rendering.
+    if (onTargetTab) tick();
+    else setTimeout(tick, 50);
   }
 
   // Hook for subclasses, called right after a jump starts (the dropdown closes itself).
