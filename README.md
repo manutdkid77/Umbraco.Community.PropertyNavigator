@@ -57,6 +57,7 @@ src/
 └── Umbraco.Community.PropertyNavigator.TestSite/  # Umbraco 17.1 + Clean 7.0.7 starter kit, references the package
 docs/
 ├── README_nuget.md                                # the README shown on NuGet
+├── icon.png / icon.svg                            # package icon (128px PNG packed; SVG is the source)
 └── HOW-IT-WORKS.md                                # implementation notes + v17 gotchas
 umbraco-marketplace.json                           # Umbraco Marketplace listing metadata
 .github/workflows/release.yml                      # tag → pack → push to NuGet
@@ -102,16 +103,6 @@ central package versions (`src/Directory.Packages.props`). The test site is
 straight from `dotnet new umbraco` (17.1.0) with the template's inline package
 versions, so its own `Directory.Packages.props` switches central versioning off
 for it.
-
-## Releasing
-
-1. Add a `NUGET_API_KEY` secret to the GitHub repo.
-2. Tag and push: `git tag 1.0.0 && git push origin 1.0.0`.
-
-The workflow packs with that version and pushes to NuGet. Packages tagged
-`umbraco-marketplace` (set in the csproj) are picked up by the
-[Umbraco Marketplace](https://marketplace.umbraco.com), which also reads
-`umbraco-marketplace.json` from the repo root.
 
 ## Compatibility
 
