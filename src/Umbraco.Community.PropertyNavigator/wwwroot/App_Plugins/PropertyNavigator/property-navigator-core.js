@@ -240,7 +240,7 @@ export class PropertyNavigatorBase extends UmbLitElement {
         setTimeout(scrollToTarget, 250);
         setTimeout(scrollToTarget, 600);
         // Flash once the smooth scroll has mostly settled.
-        setTimeout(() => flashProperty(el), 350);
+        if (this._config.highlightField) setTimeout(() => flashProperty(el), 350);
         return;
       }
       if (tries++ < 40) setTimeout(tick, 50);
