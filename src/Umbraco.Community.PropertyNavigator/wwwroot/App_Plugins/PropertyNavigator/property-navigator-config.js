@@ -11,6 +11,7 @@ export const DEFAULT_CONFIG = Object.freeze({
   enableSearch: true,
   showDescriptions: false,
   showAliases: false,
+  highlightField: true,
 });
 
 let pending;

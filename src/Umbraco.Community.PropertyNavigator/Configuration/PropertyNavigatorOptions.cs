@@ -14,4 +14,7 @@ public class PropertyNavigatorOptions
 
     // Show each field's property alias to all users (and match it when filtering).
     public bool ShowAliases { get; set; } = false;
+
+    // Briefly draw a ring around the field after jumping to it.
+    public bool HighlightField { get; set; } = true;
 }

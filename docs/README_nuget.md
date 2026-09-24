@@ -13,7 +13,8 @@ All settings are optional. Anything you leave out uses its default below, and wi
   "Enabled": true,
   "EnableSearch": true,
   "ShowDescriptions": false,
-  "ShowAliases": false
+  "ShowAliases": false,
+  "HighlightField": true
 }
 ```
 
@@ -23,6 +24,7 @@ All settings are optional. Anything you leave out uses its default below, and wi
 | `EnableSearch` | `true` | Show the filter box above the list. |
 | `ShowDescriptions` | `false` | Show each field's description (and match it when filtering). |
 | `ShowAliases` | `false` | Show each field's property alias (and match it when filtering), for all users. |
+| `HighlightField` | `true` | Briefly draw a ring around the field after jumping to it. `false` just scrolls to it. |
 
 Changes apply on the next backoffice page load; no restart needed.
 

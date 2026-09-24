@@ -26,7 +26,8 @@ defaults. To change something, add to `appsettings.json`:
   "Enabled": true,
   "EnableSearch": true,
   "ShowDescriptions": false,
-  "ShowAliases": false
+  "ShowAliases": false,
+  "HighlightField": true
 }
 ```
 
@@ -36,6 +37,7 @@ defaults. To change something, add to `appsettings.json`:
 | `EnableSearch` | `true` | Show the filter box above the list. |
 | `ShowDescriptions` | `false` | Show each field's description, and match it when filtering. |
 | `ShowAliases` | `false` | Show each field's property alias (for all users), and match it when filtering. |
+| `HighlightField` | `true` | Briefly draw a ring around the field after jumping to it. `false` just scrolls to it. |
 
 The filter always matches the field name, and only matches aliases /
 descriptions when they're shown. Changes apply on the next backoffice page load
