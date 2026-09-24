@@ -1,0 +1,36 @@
+name: Build
+
+# Checks every PR (and push to main) still builds and packs, before anything is tagged for release.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Build test site (builds the package too)
+        run: dotnet build src/Umbraco.Community.PropertyNavigator.TestSite/Umbraco.Community.PropertyNavigator.TestSite.csproj -c Release
+
+      - name: Pack
+        run: dotnet pack src/Umbraco.Community.PropertyNavigator/Umbraco.Community.PropertyNavigator.csproj -c Release -o artifacts
+
+      - name: Upload package
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuget-package
+          path: artifacts/*

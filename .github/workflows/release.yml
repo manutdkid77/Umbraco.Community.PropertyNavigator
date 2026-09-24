@@ -9,8 +9,13 @@ on:
       - '[0-9]+.[0-9]+.[0-9]+'
       - '[0-9]+.[0-9]+.[0-9]+-*'
 
+permissions:
+  contents: read
+
 jobs:
   build:
+    # Don't try to publish from forks
+    if: github.repository == 'manutdkid77/Umbraco.Community.PropertyNavigator'
     runs-on: ubuntu-latest
 
     steps:
@@ -25,5 +30,6 @@ jobs:
       - name: Build & Pack
         run: dotnet pack src/Umbraco.Community.PropertyNavigator/Umbraco.Community.PropertyNavigator.csproj -c Release -o artifacts /p:Version=${{ github.ref_name }}
 
+      # Also pushes the matching .snupkg symbols package from the same folder
       - name: Push to NuGet
         run: dotnet nuget push "artifacts/*.nupkg" -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json --skip-duplicate

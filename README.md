@@ -60,6 +60,8 @@ docs/
 ├── icon.png / icon.svg                            # package icon (128px PNG packed; SVG is the source)
 └── HOW-IT-WORKS.md                                # implementation notes + v17 gotchas
 umbraco-marketplace.json                           # Umbraco Marketplace listing metadata
+CHANGELOG.md                                       # release notes (linked from the NuGet package)
+.github/workflows/build.yml                        # PRs / main → build + pack check
 .github/workflows/release.yml                      # tag → pack → push to NuGet
 ```
 
