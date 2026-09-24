@@ -220,21 +220,33 @@ export class PropertyNavigatorBase extends UmbLitElement {
     const path = window.location.pathname;
     const base = path.match(/^.*?\/edit\/[^/]+\/[^/]+/)?.[0];
     const viewIdx = path.indexOf("/view/");
-    const contentUrl =
-      (base ?? (viewIdx === -1 ? path : path.slice(0, viewIdx))) + target;
-    const a = document.createElement("a");
-    a.href = contentUrl;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
+    const nodeUrl = base ?? (viewIdx === -1 ? path : path.slice(0, viewIdx));
+
+    // ".../tab/x" and ".../view/content/tab/x" show the same tab, but switching between them re-renders it
+    // (and resets the scroll), so don't navigate when we're already on the target tab.
+    const tabOf = (route) => route.replace(/^\/view\/content(?=\/|$)/, "");
+    const onTargetTab = tabOf(path.slice(nodeUrl.length)) === tabOf(target);
+
+    // A re-render replaces the field element, so remember the current one to avoid scrolling to it.
+    const selector = `umb-property[data-mark="property:${property.alias}"]`;
+    const stale = onTargetTab ? null : deepQuery(selector);
+
+    if (!onTargetTab) {
+      const a = document.createElement("a");
+      a.href = nodeUrl + target;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }
 
     this._onNavigated();
 
     // The tab renders its fields after navigating, so poll (every 50ms, up to ~2s) for the field.
-    const selector = `umb-property[data-mark="property:${property.alias}"]`;
     let tries = 0;
     const tick = () => {
-      const el = deepQuery(selector);
+      const found = deepQuery(selector);
+      // Skip the pre-navigation element while it might still be swapped out (~500ms); after that it's the real one.
+      const el = found && (found !== stale || tries >= 10) ? found : null;
       if (el) {
         const scrollToTarget = () =>
           el.scrollIntoView({ behavior: "smooth", block: "center" });
