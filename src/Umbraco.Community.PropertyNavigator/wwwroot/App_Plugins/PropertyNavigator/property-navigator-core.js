@@ -214,11 +214,14 @@ export class PropertyNavigatorBase extends UmbLitElement {
 
   // Switch to the property's tab, then scroll to and highlight the field.
   #goToProperty(property) {
-    // Swap everything from "/view/" for the target route; clicking an <a> keeps it an in-app (no reload) navigation.
+    // Keep the node's base route (".../edit/{id}/{culture}") and swap whatever follows — "/view/…" or a bare
+    // "/tab/…" — for the target route; clicking an <a> keeps it an in-app (no reload) navigation.
     const target = this.#tabRouteFor(property);
     const path = window.location.pathname;
+    const base = path.match(/^.*?\/edit\/[^/]+\/[^/]+/)?.[0];
     const viewIdx = path.indexOf("/view/");
-    const contentUrl = (viewIdx === -1 ? path : path.slice(0, viewIdx)) + target;
+    const contentUrl =
+      (base ?? (viewIdx === -1 ? path : path.slice(0, viewIdx))) + target;
     const a = document.createElement("a");
     a.href = contentUrl;
     document.body.appendChild(a);
