@@ -54,7 +54,7 @@ src/
 │   ├── Controllers/PropertyNavigatorConfigController.cs  # exposes them to the backoffice
 │   ├── Composers/PropertyNavigatorComposer.cs     # options binding + Swagger doc
 │   └── wwwroot/App_Plugins/PropertyNavigator/     # the backoffice extension (no-build JS)
-└── Umbraco.Community.PropertyNavigator.TestSite/  # Umbraco 17.1 + Clean 7.0.7 starter kit, references the package
+└── Umbraco.Community.PropertyNavigator.TestSite/  # Umbraco 17.7 + Clean 7.0.8 starter kit, references the package
 docs/
 ├── README_nuget.md                                # the README shown on NuGet
 ├── icon.png / icon.svg                            # package icon (128px PNG packed; SVG is the source)
@@ -100,7 +100,7 @@ JS edits show up on a browser refresh (hard-refresh if cached); C# changes and
 
 The package builds against the **minimum** supported Umbraco (17.0.0) via
 central package versions (`src/Directory.Packages.props`). The test site is
-straight from `dotnet new umbraco` (17.1.0) with the template's inline package
+straight from `dotnet new umbraco` (17.7.0) with the template's inline package
 versions, so its own `Directory.Packages.props` switches central versioning off
 for it.
 
