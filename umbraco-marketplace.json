@@ -2,11 +2,13 @@
   "$schema": "https://marketplace.umbraco.com/umbraco-marketplace-schema.json",
   "AuthorDetails": {
     "Name": "Nathaniel Nunes",
-    "ImageUrl": "https://github.com/manutdkid77.png"
+    "ImageUrl": "https://github.com/manutdkid77.png",
+    "Url": "https://github.com/manutdkid77"
   },
   "Category": "Editor Tools",
   "Description": "Find and jump to any field on a content node. Click the active Content view for a dropdown of every field (like v13); type to filter, click to jump. Search box, descriptions and aliases are configurable via appsettings.",
   "LicenseTypes": [ "Free" ],
+  "DocumentationUrl": "https://github.com/manutdkid77/Umbraco.Community.PropertyNavigator#readme",
   "IssueTrackerUrl": "https://github.com/manutdkid77/Umbraco.Community.PropertyNavigator/issues",
   "PackageType": "Package",
   "Tags": [ "backoffice", "navigation", "editor experience", "search" ],
