@@ -102,6 +102,7 @@ export class PropertyNavigatorBase extends UmbLitElement {
     _properties: { state: true },
     _filter: { state: true },
     _tabs: { state: true },
+    _groups: { state: true },
     _config: { state: true },
   };
 
@@ -113,6 +114,7 @@ export class PropertyNavigatorBase extends UmbLitElement {
     this._properties = [];
     this._filter = "";
     this._tabs = [];
+    this._groups = new Map();
     // Render with the defaults until the config (fetched once per page) arrives.
     this._config = DEFAULT_CONFIG;
     this._configLoaded = false; // lets surfaces stay inert until they know whether they're enabled
@@ -135,13 +137,31 @@ export class PropertyNavigatorBase extends UmbLitElement {
         "propNavProperties",
       );
 
-      // The Tabs; each lists the group `ids` merged into it, which maps a property back to its tab.
+      // The Tabs; each lists the container `ids` merged into it (one per content type/composition that has it).
       this.observe(
         context.structure.contentTypeMergedContainers,
         (containers) => {
           this._tabs = (containers ?? []).filter((c) => c.type === "Tab");
         },
         "propNavContainers",
+      );
+
+      // Groups, from every content type and composition: a property inside a group points at the group,
+      // and the group's `parent` is the tab it sits on (null for a group that isn't on a tab).
+      this.observe(
+        context.structure.contentTypes,
+        (types) => {
+          const groups = new Map();
+          for (const type of types ?? []) {
+            for (const c of type.containers ?? []) {
+              if (c.type === "Group") {
+                groups.set(c.id, { parentId: c.parent?.id ?? null, sortOrder: c.sortOrder ?? 0 });
+              }
+            }
+          }
+          this._groups = groups;
+        },
+        "propNavGroups",
       );
     });
   }
@@ -154,15 +174,24 @@ export class PropertyNavigatorBase extends UmbLitElement {
     this._filter = "";
   };
 
-  // Group id → its Tab (for sort order, headings and navigation).
-  #tabByGroup() {
+  // Container id (a tab, or a group on a tab) → its Tab (for sort order, headings and navigation).
+  #tabByContainer() {
     const map = new Map();
     for (const tab of this._tabs) {
-      for (const groupId of tab.ids ?? []) {
-        map.set(groupId, tab);
+      for (const tabId of tab.ids ?? []) {
+        map.set(tabId, tab);
       }
     }
+    for (const [groupId, group] of this._groups) {
+      const tab = map.get(group.parentId);
+      if (tab) map.set(groupId, tab);
+    }
     return map;
+  }
+
+  // Where a property sits within its tab: fields directly on the tab first, then by group order.
+  #groupOrderOf(property) {
+    return this._groups.get(property.container?.id)?.sortOrder ?? -1;
   }
 
   // Filtered (name, plus alias/description only when shown) then sorted by tab, then by field sortOrder.
@@ -179,21 +208,33 @@ export class PropertyNavigatorBase extends UmbLitElement {
             (showDescriptions && has(p.description)),
         );
 
-    const tabByGroup = this.#tabByGroup();
+    const tabByContainer = this.#tabByContainer();
+    // Rank tabs rather than comparing sortOrder directly: tabs can share a sortOrder (e.g. from different
+    // compositions), and comparing equal values would interleave their fields. The stable sort keeps tied
+    // tabs in the order Umbraco lists them.
+    const tabRank = new Map(
+      [...this._tabs]
+        .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0))
+        .map((tab, i) => [tab, i]),
+    );
     const orderOf = (p) =>
-      tabByGroup.get(p.container?.id)?.sortOrder ?? Number.MAX_SAFE_INTEGER;
+      tabRank.get(tabByContainer.get(p.container?.id)) ?? Number.MAX_SAFE_INTEGER;
     return [...matches].sort((a, b) => {
-      return orderOf(a) - orderOf(b) || (a.sortOrder ?? 0) - (b.sortOrder ?? 0);
+      return (
+        orderOf(a) - orderOf(b) ||
+        this.#groupOrderOf(a) - this.#groupOrderOf(b) ||
+        (a.sortOrder ?? 0) - (b.sortOrder ?? 0)
+      );
     });
   }
 
   // Split the (already tab-ordered) list into consecutive runs per tab for the headings.
   #groups() {
-    const tabByGroup = this.#tabByGroup();
+    const tabByContainer = this.#tabByContainer();
     const groups = [];
     let current = null;
     for (const p of this.#filtered()) {
-      const label = tabByGroup.get(p.container?.id)?.name ?? "Other";
+      const label = tabByContainer.get(p.container?.id)?.name ?? "Other";
       if (!current || current.label !== label) {
         current = { label, items: [] };
         groups.push(current);
@@ -205,10 +246,8 @@ export class PropertyNavigatorBase extends UmbLitElement {
 
   // Route of the sub-tab holding this property, e.g. "/view/content/tab/seo" (plain "/view/content" if no tabs).
   #tabRouteFor(property) {
-    const groupId = property?.container?.id;
-    const tab = groupId
-      ? this._tabs.find((t) => Array.isArray(t.ids) && t.ids.includes(groupId))
-      : undefined;
+    const containerId = property?.container?.id;
+    const tab = containerId ? this.#tabByContainer().get(containerId) : undefined;
     return tab?.key ? `/view/content/${tab.key}` : "/view/content";
   }
 
@@ -300,24 +339,24 @@ export class PropertyNavigatorBase extends UmbLitElement {
         : `Filter by ${fields.slice(0, -1).join(", ")} or ${fields.at(-1)}…`;
     return html`
       <uui-input
-        type="search"
+        type="text"
         label="Filter properties"
         placeholder=${placeholder}
         .value=${this._filter}
         @input=${this.#onSearch}
         style="width: 100%; margin-bottom: var(--uui-size-6);"
       >
+        <uui-icon name="search" slot="prepend" class="search-icon"></uui-icon>
         ${this._filter
-          ? html`<button
+          ? html`<uui-button
               slot="append"
-              type="button"
-              class="clear-btn"
-              title="Clear filter"
-              aria-label="Clear filter"
+              compact
+              label="Clear filter"
+              style="height: 100%;"
               @click=${this.#clearFilter}
             >
-              ✕
-            </button>`
+              <uui-icon name="remove"></uui-icon>
+            </uui-button>`
           : ""}
       </uui-input>
     `;
@@ -335,30 +374,28 @@ export class PropertyNavigatorBase extends UmbLitElement {
             (g) => html`
               <div class="tab-group">
                 <h4 class="tab-heading">${g.label}</h4>
-                <ul>
-                  ${g.items.map(
-                    (p) => html`
-                      <li>
-                        <button
-                          type="button"
-                          @click=${() => this.#goToProperty(p)}
-                        >
-                          <span class="prop-line">
-                            <strong>${this.#highlight(p.name)}</strong>
-                            ${showAliases
-                              ? html`— <code>${this.#highlight(p.alias)}</code>`
-                              : ""}
-                          </span>
-                          ${showDescriptions && p.description
-                            ? html`<span class="prop-desc"
-                                >${this.#highlight(p.description)}</span
-                              >`
+                ${g.items.map(
+                  (p) => html`
+                    <uui-menu-item
+                      label=${p.name}
+                      @click-label=${() => this.#goToProperty(p)}
+                    >
+                      <span slot="label" class="prop-label">
+                        <span class="prop-line">
+                          <strong>${this.#highlight(p.name)}</strong>
+                          ${showAliases
+                            ? html`— <code>${this.#highlight(p.alias)}</code>`
                             : ""}
-                        </button>
-                      </li>
-                    `,
-                  )}
-                </ul>
+                        </span>
+                        ${showDescriptions && p.description
+                          ? html`<span class="prop-desc"
+                              >${this.#highlight(p.description)}</span
+                            >`
+                          : ""}
+                      </span>
+                    </uui-menu-item>
+                  `,
+                )}
               </div>
             `,
           )}
@@ -379,26 +416,16 @@ export class PropertyNavigatorBase extends UmbLitElement {
       letter-spacing: 0.05em;
       color: var(--uui-color-text-alt);
     }
-    ul {
-      list-style: none;
-      margin: 0;
-      padding: 0;
+    uui-menu-item {
+      --uui-menu-item-flat-structure: 1; /* no caret column: the list is flat */
     }
-    li {
-      border-bottom: 1px solid var(--uui-color-divider);
-    }
-    li button {
-      width: 100%;
-      text-align: left;
-      cursor: pointer;
-      font: inherit;
-      color: inherit;
-      background: none;
-      border: none;
-      padding: var(--uui-size-3) var(--uui-size-2);
-    }
-    li button:hover {
-      background: var(--uui-color-surface-alt);
+    /* uui-menu-item keeps its label on one line; let long names and descriptions wrap instead. */
+    .prop-label {
+      display: block;
+      min-width: 0;
+      white-space: normal;
+      overflow-wrap: anywhere; /* long URLs in descriptions would otherwise be clipped by the item */
+      padding: var(--uui-size-2) 0;
     }
     .prop-desc {
       display: block;
@@ -416,21 +443,9 @@ export class PropertyNavigatorBase extends UmbLitElement {
       border-radius: 2px;
       padding: 0 1px;
     }
-    .clear-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-      padding: 0 var(--uui-size-3);
-      cursor: pointer;
-      border: none;
-      background: none;
-      font-size: var(--uui-size-4);
-      line-height: 1;
+    .search-icon {
+      padding-left: var(--uui-size-space-3);
       color: var(--uui-color-text-alt);
-    }
-    .clear-btn:hover {
-      color: var(--uui-color-text);
     }
   `;
 }
