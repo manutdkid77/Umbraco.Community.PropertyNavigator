@@ -1,6 +1,6 @@
 namespace Umbraco.Community.PropertyNavigator.Configuration;
 
-// Bound from the "PropertyNavigator" section of appsettings.json.
+// Bound from the "Umbraco.Community.PropertyNavigator" section of appsettings.json.
 public class PropertyNavigatorOptions
 {
     // Master switch: when false the package does nothing and the Content view behaves as stock Umbraco.

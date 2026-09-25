@@ -26,11 +26,11 @@ Restart the site and open any content node.
 ![Filtering the dropdown to a handful of matching fields](docs/screenshots/filter.png)
 
 All settings are optional. Anything you leave out uses its default below, and
-with no `PropertyNavigator` section at all the package is simply on with the
-defaults. To change something, add to `appsettings.json`:
+with no `Umbraco.Community.PropertyNavigator` section at all the package is
+simply on with the defaults. To change something, add to `appsettings.json`:
 
 ```json
-"PropertyNavigator": {
+"Umbraco.Community.PropertyNavigator": {
   "Enabled": true,
   "EnableSearch": true,
   "ShowDescriptions": false,
