@@ -7,6 +7,8 @@ property on a content node.
 dropdown lists every field on the node — just like v13's Content app. Type to
 filter, click to jump straight to the field.
 
+**See it in action**
+
 ![Property Navigator: opening the dropdown, filtering and jumping to a field](docs/screenshots/demo.gif)
 
 ## Install
@@ -18,6 +20,8 @@ dotnet add package Umbraco.Community.PropertyNavigator
 Restart the site and open any content node.
 
 ## Configuration
+
+**Filter as you type**
 
 ![Filtering the dropdown to a handful of matching fields](docs/screenshots/filter.png)
 
@@ -43,13 +47,19 @@ defaults. To change something, add to `appsettings.json`:
 | `ShowAliases` | `false` | Show each field's property alias (for all users), and match it when filtering. |
 | `HighlightField` | `true` | Briefly draw a ring around the field after jumping to it. `false` just scrolls to it. |
 
+**With `ShowAliases` enabled**
+
 ![ShowAliases enabled: each field's property alias shown next to its name](docs/screenshots/aliases.png)
+
+**With `ShowDescriptions` enabled**
 
 ![ShowDescriptions enabled: each field's description shown under its name](docs/screenshots/descriptions.png)
 
 The filter always matches the field name, and only matches aliases /
 descriptions when they're shown. Changes apply on the next backoffice page load
 — no restart needed.
+
+**Jump to a field, with a highlight ring**
 
 ![The editor scrolled to a field, still showing the highlight ring after a jump](docs/screenshots/highlight.png)
 
