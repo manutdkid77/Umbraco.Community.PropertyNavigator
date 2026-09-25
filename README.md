@@ -1,4 +1,4 @@
-# Property Navigator (Umbraco 17)
+# Umbraco.Community.PropertyNavigator (Umbraco 17)
 
 An **Umbraco 17** backoffice package for quickly finding and jumping to any
 property on a content node.
@@ -6,6 +6,8 @@ property on a content node.
 **Click the Content view** (top right) while you're already on it and a
 dropdown lists every field on the node — just like v13's Content app. Type to
 filter, click to jump straight to the field.
+
+![Property Navigator: opening the dropdown, filtering and jumping to a field](docs/screenshots/demo.gif)
 
 ## Install
 
@@ -16,6 +18,8 @@ dotnet add package Umbraco.Community.PropertyNavigator
 Restart the site and open any content node.
 
 ## Configuration
+
+![Filtering the dropdown to a handful of matching fields](docs/screenshots/filter.png)
 
 All settings are optional. Anything you leave out uses its default below, and
 with no `PropertyNavigator` section at all the package is simply on with the
@@ -39,9 +43,15 @@ defaults. To change something, add to `appsettings.json`:
 | `ShowAliases` | `false` | Show each field's property alias (for all users), and match it when filtering. |
 | `HighlightField` | `true` | Briefly draw a ring around the field after jumping to it. `false` just scrolls to it. |
 
+![ShowAliases enabled: each field's property alias shown next to its name](docs/screenshots/aliases.png)
+
+![ShowDescriptions enabled: each field's description shown under its name](docs/screenshots/descriptions.png)
+
 The filter always matches the field name, and only matches aliases /
 descriptions when they're shown. Changes apply on the next backoffice page load
 — no restart needed.
+
+![The editor scrolled to a field, still showing the highlight ring after a jump](docs/screenshots/highlight.png)
 
 ## Repository layout
 
@@ -58,6 +68,7 @@ src/
 docs/
 ├── README_nuget.md                                # the README shown on NuGet
 ├── icon.png / icon.svg                            # package icon (128px PNG packed; SVG is the source)
+├── screenshots/                                   # README / NuGet / Marketplace screenshots + demo GIF
 └── HOW-IT-WORKS.md                                # implementation notes + v17 gotchas
 umbraco-marketplace.json                           # Umbraco Marketplace listing metadata
 CHANGELOG.md                                       # release notes (linked from the NuGet package)

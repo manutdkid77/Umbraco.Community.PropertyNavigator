@@ -20,7 +20,7 @@ public class PropertyNavigatorComposer : IComposer
         {
             opt.SwaggerDoc(Constants.ApiName, new OpenApiInfo
             {
-                Title = "Property Navigator Backoffice API",
+                Title = "Umbraco.Community.PropertyNavigator Backoffice API",
                 Version = "1.0",
             });
             opt.OperationFilter<PropertyNavigatorOperationSecurityFilter>();
