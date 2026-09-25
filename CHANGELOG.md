@@ -6,6 +6,20 @@ All notable changes to this package are documented here. The format follows
 
 ## [Unreleased]
 
+## [1.0.2]
+
+### Changed
+
+- **Breaking:** `appsettings.json` configuration section renamed from
+  `PropertyNavigator` to `Umbraco.Community.PropertyNavigator`. Update any
+  existing config to use the new section name.
+
+## [1.0.1]
+
+### Changed
+
+- Added captions above each screenshot in the README docs.
+
 ## [1.0.0]
 
 First release, for Umbraco 17.
@@ -17,5 +31,7 @@ First release, for Umbraco 17.
 - `appsettings.json` settings under `PropertyNavigator`: `Enabled`,
   `EnableSearch`, `ShowDescriptions`, `ShowAliases` and `HighlightField`.
 
-[Unreleased]: https://github.com/manutdkid77/Umbraco.Community.PropertyNavigator/compare/1.0.0...HEAD
+[Unreleased]: https://github.com/manutdkid77/Umbraco.Community.PropertyNavigator/compare/1.0.2...HEAD
+[1.0.2]: https://github.com/manutdkid77/Umbraco.Community.PropertyNavigator/compare/1.0.1...1.0.2
+[1.0.1]: https://github.com/manutdkid77/Umbraco.Community.PropertyNavigator/compare/1.0.0...1.0.1
 [1.0.0]: https://github.com/manutdkid77/Umbraco.Community.PropertyNavigator/releases/tag/1.0.0

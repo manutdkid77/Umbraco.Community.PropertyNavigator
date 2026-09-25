@@ -56,9 +56,9 @@ Both feed Lit reactive state, so the list re-renders as they arrive.
 The browser can't read `appsettings.json`, so the C# side bridges it:
 
 1. `PropertyNavigatorComposer` binds `PropertyNavigatorOptions` from the
-   `PropertyNavigator` section. Every setting is optional: missing keys (or a
-   missing section) keep the property initialisers' defaults, and the client's
-   `DEFAULT_CONFIG` mirrors them.
+   `Umbraco.Community.PropertyNavigator` section. Every setting is optional:
+   missing keys (or a missing section) keep the property initialisers'
+   defaults, and the client's `DEFAULT_CONFIG` mirrors them.
 2. `PropertyNavigatorConfigController` (a `ManagementApiControllerBase`) serves
    it at `GET /umbraco/management/api/v1/property-navigator/config`, behind the
    `SectionAccessContent` policy, in its own Swagger document. It reads

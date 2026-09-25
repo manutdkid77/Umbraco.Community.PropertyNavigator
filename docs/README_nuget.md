@@ -14,10 +14,10 @@ Find and jump to any field on an Umbraco content node, without hunting through t
 
 ![Filtering the dropdown to a handful of matching fields](https://raw.githubusercontent.com/manutdkid77/Umbraco.Community.PropertyNavigator/main/docs/screenshots/filter.png)
 
-All settings are optional. Anything you leave out uses its default below, and with no `PropertyNavigator` section at all the package is simply on with the defaults. To change something, add to `appsettings.json`:
+All settings are optional. Anything you leave out uses its default below, and with no `Umbraco.Community.PropertyNavigator` section at all the package is simply on with the defaults. To change something, add to `appsettings.json`:
 
 ```json
-"PropertyNavigator": {
+"Umbraco.Community.PropertyNavigator": {
   "Enabled": true,
   "EnableSearch": true,
   "ShowDescriptions": false,

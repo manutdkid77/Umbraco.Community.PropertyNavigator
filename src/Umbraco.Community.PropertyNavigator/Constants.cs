@@ -6,5 +6,5 @@ public static class Constants
     public const string ApiName = "property-navigator";
 
     // appsettings section the options are bound from.
-    public const string ConfigurationSection = "PropertyNavigator";
+    public const string ConfigurationSection = "Umbraco.Community.PropertyNavigator";
 }
