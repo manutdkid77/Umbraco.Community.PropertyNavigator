@@ -11,6 +11,32 @@
   "DocumentationUrl": "https://github.com/manutdkid77/Umbraco.Community.PropertyNavigator#readme",
   "IssueTrackerUrl": "https://github.com/manutdkid77/Umbraco.Community.PropertyNavigator/issues",
   "PackageType": "Package",
+  "Screenshots": [
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/manutdkid77/Umbraco.Community.PropertyNavigator/main/docs/screenshots/dropdown.png",
+      "Caption": "The dropdown open on a content node, listing every field"
+    },
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/manutdkid77/Umbraco.Community.PropertyNavigator/main/docs/screenshots/filter.png",
+      "Caption": "Typing to filter the list down to matching fields"
+    },
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/manutdkid77/Umbraco.Community.PropertyNavigator/main/docs/screenshots/highlight.png",
+      "Caption": "Jumped to a field, with the highlight ring still showing"
+    },
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/manutdkid77/Umbraco.Community.PropertyNavigator/main/docs/screenshots/aliases.png",
+      "Caption": "ShowAliases enabled: each field's property alias shown next to its name"
+    },
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/manutdkid77/Umbraco.Community.PropertyNavigator/main/docs/screenshots/descriptions.png",
+      "Caption": "ShowDescriptions enabled: each field's description shown under its name"
+    },
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/manutdkid77/Umbraco.Community.PropertyNavigator/main/docs/screenshots/demo.gif",
+      "Caption": "Opening the dropdown, filtering and jumping to a field"
+    }
+  ],
   "Tags": [ "backoffice", "navigation", "editor experience", "search" ],
-  "Title": "Property Navigator"
+  "Title": "Umbraco.Community.PropertyNavigator"
 }

@@ -10,7 +10,7 @@
   <PropertyGroup>
     <Product>Umbraco.Community.PropertyNavigator</Product>
     <PackageId>Umbraco.Community.PropertyNavigator</PackageId>
-    <Title>Property Navigator</Title>
+    <Title>Umbraco.Community.PropertyNavigator</Title>
     <Description>Find and jump to any field on an Umbraco content node. Click the active Content view for a dropdown of every field (like v13); type to filter, click to jump.</Description>
     <!-- "umbraco-marketplace" is what gets the package listed on the Umbraco Marketplace -->
     <PackageTags>umbraco;umbraco-marketplace;umbraco-cms;backoffice;navigation</PackageTags>
