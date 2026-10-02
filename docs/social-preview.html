@@ -1,0 +1,49 @@
+<!doctype html>
+<!-- Source for docs/social-preview.png (GitHub social preview, 1280x640).
+     Regenerate: chrome --headless --hide-scrollbars --window-size=1280,640
+                 --screenshot=docs/social-preview.png docs/social-preview.html -->
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  html, body { margin: 0; width: 1280px; height: 640px; overflow: hidden; }
+  body {
+    background: #F4F5FB;
+    font-family: "Segoe UI", system-ui, sans-serif;
+    color: #1B1F4A;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .bar { position: absolute; left: 0; right: 0; bottom: 0; height: 16px; background: #3544B1; }
+  .card { display: flex; align-items: center; gap: 64px; padding: 0 96px; }
+  .icon { width: 260px; height: 260px; flex: none; filter: drop-shadow(0 12px 28px rgba(53,68,177,.28)); }
+  h1 { margin: 0; font-size: 76px; font-weight: 700; letter-spacing: -1.5px; line-height: 1.05; }
+  .sub { margin: 10px 0 0; font-size: 34px; font-weight: 600; color: #3544B1; }
+  .tag { margin: 28px 0 0; font-size: 28px; line-height: 1.4; color: #4A4F75; max-width: 700px; }
+  .pkg {
+    display: inline-block; margin-top: 36px; padding: 12px 22px; border-radius: 12px;
+    background: #fff; border: 2px solid #DADDF0;
+    font-family: "Cascadia Mono", Consolas, monospace; font-size: 22px; color: #3544B1;
+  }
+</style>
+</head>
+<body>
+  <div class="card">
+    <svg class="icon" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+      <rect width="512" height="512" rx="112" fill="#3544B1"/>
+      <rect x="156" y="128" width="200" height="48" rx="24" fill="#FFFFFF"/>
+      <rect x="100" y="210" width="312" height="92" rx="46" fill="#F5C1BC"/>
+      <polygon points="150,232 190,256 150,280" fill="#3544B1" stroke="#3544B1" stroke-width="14" stroke-linejoin="round"/>
+      <rect x="222" y="245" width="146" height="22" rx="11" fill="#3544B1"/>
+      <rect x="156" y="336" width="160" height="48" rx="24" fill="#FFFFFF"/>
+    </svg>
+    <div>
+      <h1>Property Navigator</h1>
+      <p class="sub">for Umbraco 17</p>
+      <p class="tag">Find and jump to any property on a content node, straight from the Content view.</p>
+      <div class="pkg">Umbraco.Community.PropertyNavigator</div>
+    </div>
+  </div>
+  <div class="bar"></div>
+</body>
+</html>

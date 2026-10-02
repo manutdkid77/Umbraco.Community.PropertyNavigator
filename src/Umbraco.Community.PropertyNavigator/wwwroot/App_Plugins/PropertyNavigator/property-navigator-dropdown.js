@@ -14,6 +14,7 @@ const EDGE = 8; // min px kept from the viewport edges
 export class PropertyNavigatorDropdownElement extends PropertyNavigatorBase {
   #listenRoot; // shadow root shared by the workspace footer and the editor's view tabs
   #wasOpenOnPointerDown = false;
+  #anchor; // the Content tab the panel was opened from
 
   connectedCallback() {
     super.connectedCallback();
@@ -81,6 +82,7 @@ export class PropertyNavigatorDropdownElement extends PropertyNavigatorBase {
   #openBelow(anchor) {
     const panel = this.#panel();
     if (!panel?.showPopover) return;
+    this.#anchor = anchor;
     const r = anchor.getBoundingClientRect();
     const vw = document.documentElement.clientWidth;
     const vh = document.documentElement.clientHeight;
@@ -94,9 +96,11 @@ export class PropertyNavigatorDropdownElement extends PropertyNavigatorBase {
     panel.showPopover();
   }
 
-  // Close after a jump so the panel doesn't cover the field we navigated to.
+  // Close after a jump so the panel doesn't cover the field; keep focus on the Content tab, not <body>.
   _onNavigated() {
+    const hadFocus = this.#panel()?.matches(":focus-within");
     this.#close();
+    if (hadFocus && this.#anchor) this.#focusTab(this.#anchor);
   }
 
   // On open: scroll back to the top and focus the search box.
@@ -107,9 +111,47 @@ export class PropertyNavigatorDropdownElement extends PropertyNavigatorBase {
     panel?.querySelector("uui-input")?.focus?.();
   };
 
+  // Tabbing out of the panel returns to the view tabs (beside Content), not the footer the panel lives in.
+  #onKeyDown = (e) => {
+    if (!this.#anchor) return;
+    // The popover's own Escape handling leaves focus on <body>; return it to the Content tab instead.
+    if (e.key === "Escape") {
+      e.preventDefault();
+      this.#close();
+      this.#focusTab(this.#anchor);
+      return;
+    }
+    if (e.key !== "Tab") return;
+    const panel = this.#panel();
+    const stops = [...panel.querySelectorAll("uui-input, uui-button, uui-menu-item")];
+    const path = e.composedPath();
+    const edge = e.shiftKey ? stops[0] : stops.at(-1);
+    if (!edge || !path.includes(edge)) return;
+    // Shift+Tab inside the input's own clear button is still within the panel.
+    if (e.shiftKey && path.some((n) => n !== edge && stops.includes(n))) return;
+
+    e.preventDefault();
+    const tabs = [...(this.#anchor.parentElement?.children ?? [])].filter((t) => t.localName === "uui-tab");
+    const target = e.shiftKey ? this.#anchor : (tabs[tabs.indexOf(this.#anchor) + 1] ?? this.#anchor);
+    this.#close();
+    this.#focusTab(target);
+  };
+
+  // uui-tab doesn't delegate focus; the focusable part is the link in its shadow root.
+  #focusTab(tab) {
+    (tab.shadowRoot?.querySelector("#button") ?? tab).focus();
+  }
+
   render() {
     return html`
-      <div class="popover-panel" popover="auto" @toggle=${this.#onToggle}>
+      <div
+        class="popover-panel"
+        popover="auto"
+        role="dialog"
+        aria-label="Property navigator"
+        @toggle=${this.#onToggle}
+        @keydown=${this.#onKeyDown}
+      >
         ${this.renderNavigator()}
       </div>
     `;

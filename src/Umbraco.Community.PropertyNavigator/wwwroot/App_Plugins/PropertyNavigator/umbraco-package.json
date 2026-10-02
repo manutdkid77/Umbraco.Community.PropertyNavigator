@@ -2,7 +2,7 @@
   "$schema": "../../umbraco-package-schema.json",
   "id": "Umbraco.Community.PropertyNavigator",
   "name": "Umbraco.Community.PropertyNavigator",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "extensions": [
     {
       "type": "workspaceFooterApp",
