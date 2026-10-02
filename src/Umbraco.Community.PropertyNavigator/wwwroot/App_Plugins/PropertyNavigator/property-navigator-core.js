@@ -28,6 +28,28 @@ const RING_INSET = 4; // min px between the ring and the edge of the field's uui
 // Parent across shadow boundaries (a shadow root's parent is its host).
 const parentAcross = (n) => n.parentElement ?? n.getRootNode().host ?? null;
 
+// Parent in the rendered (flattened) tree: a slotted element's parent is its slot, not its light-DOM parent.
+const composedParent = (n) => n.assignedSlot ?? parentAcross(n);
+
+// Nearest ancestor that scrolls vertically (following slots, as the fields are slotted into it), or the page.
+function scrollParentOf(el) {
+  for (let n = composedParent(el); n && n !== document.documentElement; n = composedParent(n)) {
+    if (!(n instanceof Element)) continue;
+    const { overflowY } = getComputedStyle(n);
+    if ((overflowY === "auto" || overflowY === "scroll") && n.scrollHeight > n.clientHeight) return n;
+  }
+  return document.scrollingElement ?? document.documentElement;
+}
+
+// Centre a field that fits in view; align a taller one (e.g. block previews) to its top, not its middle.
+function scrollToField(el) {
+  const scroller = scrollParentOf(el);
+  const viewHeight =
+    scroller === document.scrollingElement ? window.innerHeight : scroller.clientHeight;
+  const block = el.getBoundingClientRect().height > viewHeight - RING_PADDING * 2 ? "start" : "center";
+  el.scrollIntoView({ behavior: "smooth", block });
+}
+
 // Fade a rounded ring in and out around the field we jumped to, padded but clamped inside its box.
 function flashProperty(el) {
   el.shadowRoot?.querySelector(".propnav-flash")?.remove();
@@ -69,8 +91,8 @@ function flashProperty(el) {
     position: "absolute",
     top: `${top - host.top}px`,
     left: `${left - host.left}px`,
-    width: `${right - left}px`,
-    height: `${bottom - top}px`,
+    right: `${host.right - right}px`, // inset rather than sized, so the ring grows with the field
+    bottom: `${host.bottom - bottom}px`,
     boxSizing: "border-box",
     border: `2px solid ${accent}`,
     borderRadius: "6px",
@@ -107,6 +129,7 @@ export class PropertyNavigatorBase extends UmbLitElement {
   };
 
   #workspace; // the document workspace context, once consumed
+  #stopAligning = () => {}; // cancels the previous jump's pending re-alignment
 
   constructor() {
     super();
@@ -170,8 +193,11 @@ export class PropertyNavigatorBase extends UmbLitElement {
     this._filter = (e.target.value ?? "").toLowerCase();
   };
 
-  #clearFilter = () => {
+  // The clear button is removed once the filter is empty, so hand focus back to the box instead of losing it.
+  #clearFilter = async () => {
     this._filter = "";
+    await this.updateComplete;
+    this.renderRoot.querySelector("uui-input")?.focus();
   };
 
   // Container id (a tab, or a group on a tab) → its Tab (for sort order, headings and navigation).
@@ -253,6 +279,7 @@ export class PropertyNavigatorBase extends UmbLitElement {
 
   // Switch to the property's tab, then scroll to and highlight the field.
   #goToProperty(property) {
+    this.#stopAligning(); // a new jump replaces any re-alignment still running from the last one
     // Keep the node's base route (".../edit/{id}/{culture}") and swap whatever follows — "/view/…" or a bare
     // "/tab/…" — for the target route; clicking an <a> keeps it an in-app (no reload) navigation.
     const target = this.#tabRouteFor(property);
@@ -287,12 +314,18 @@ export class PropertyNavigatorBase extends UmbLitElement {
       // Skip the pre-navigation element while it might still be swapped out (~500ms); after that it's the real one.
       const el = found && (found !== stale || tries >= 10) ? found : null;
       if (el) {
-        const scrollToTarget = () =>
-          el.scrollIntoView({ behavior: "smooth", block: "center" });
-        // Editors above it keep growing as they lay out, so re-centre a couple of times.
-        scrollToTarget();
-        setTimeout(scrollToTarget, 250);
-        setTimeout(scrollToTarget, 600);
+        // Editors keep growing as they load, so re-align a few times, stopping as soon as the user scrolls or types.
+        const timers = [250, 600, 1200, 2000, 3000].map((ms) => setTimeout(() => scrollToField(el), ms));
+        const USER_INPUT = ["wheel", "touchstart", "keydown", "pointerdown"];
+        const stop = () => {
+          timers.forEach(clearTimeout);
+          USER_INPUT.forEach((type) => window.removeEventListener(type, stop, true));
+        };
+        this.#stopAligning = stop;
+        // Attach after this event loop turn so the keypress/click that triggered the jump doesn't count.
+        setTimeout(() => USER_INPUT.forEach((type) => window.addEventListener(type, stop, true)));
+        setTimeout(stop, 3100);
+        scrollToField(el);
         // The ring rides along with the field, so on the same tab show it straight away; after a tab switch,
         // wait for the fields to finish laying out.
         if (this._config.highlightField) {

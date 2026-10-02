@@ -110,6 +110,15 @@ nothing visible (`display: contents`) — and hooks the tab from the DOM:
   it rather than reopen it.
 - It closes after a jump (`_onNavigated()`), and each open resets the scroll and
   focuses the search box.
+- **Keyboard:** the panel sits in the footer in DOM order, so Tab would run from
+  its last item into the footer buttons. A `keydown` handler sends Tab off the
+  end to the next view tab (e.g. Info) and Shift+Tab off the search box back to
+  Content. Escape, and a jump made from inside the panel, also return focus to
+  the Content tab (`uui-tab` doesn't delegate focus, so it focuses the tab's
+  inner `#button` link). Clearing the filter refocuses the search box, since the
+  clear button disappears with the text.
+- The panel has `role="dialog"` and `aria-label="Property navigator"` so screen
+  readers announce it.
 
 If a future Umbraco version changes that `data-mark` or the footer/editor
 nesting, the hook silently stops working.
@@ -123,12 +132,22 @@ So a click:
 2. Navigates to `/view/content/tab/<name>` by clicking a synthetic `<a>`, which
    the router handles as an in-app (no-reload) switch.
 3. Polls for `umb-property[data-mark="property:<alias>"]` with a
-   shadow-piercing `deepQuery`, then `scrollIntoView`s it — re-centring a few
-   times, since editors above it keep growing as they lay out.
-4. Rings it (`flashProperty`): an overlay in the field's shadow root, sized to
-   the field's content (minus `umb-property-layout`'s 24px vertical padding)
-   plus 10px, **clamped inside the surrounding `uui-box`** — a plain
-   `outline-offset` pokes out of the box on the first/last field.
+   shadow-piercing `deepQuery`, then `scrollIntoView`s it: **centred** if it fits
+   the scroll area, **top-aligned** if it's taller (e.g. a block list with
+   previews), so you land on its label rather than its middle. The scroll area
+   is found by walking up the rendered tree through slots (`assignedSlot`) —
+   the workspace's `uui-scroll-container` is in a shadow root the fields are
+   slotted into, so a plain `parentElement` walk misses it.
+4. Re-aligns at intervals for ~3s, since editors (block previews especially)
+   keep growing as they load. It stops on the first `wheel` / `keydown` /
+   `pointerdown` / `touchstart`, so it never fights the user, and a new jump
+   cancels the previous one's timers.
+5. Rings it (`flashProperty`): an overlay in the field's shadow root, 10px
+   outside the field's content (minus `umb-property-layout`'s 24px vertical
+   padding), **clamped inside the surrounding `uui-box`** — a plain
+   `outline-offset` pokes out of the box on the first/last field. It's
+   positioned by its four edges rather than a fixed size, so it grows with the
+   field if previews finish loading mid-animation.
 
 ## Gotchas (v17, no-build)
 

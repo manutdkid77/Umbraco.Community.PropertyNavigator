@@ -1,19 +1,34 @@
-# Umbraco.Community.PropertyNavigator (Umbraco 17)
+# <img src="docs/icon.png" alt="Property Navigator icon" width="50" height="50" align="absmiddle" /> Property Navigator for Umbraco
 
-An **Umbraco 17** backoffice package for quickly finding and jumping to any
-property on a content node.
+[![NuGet version](https://img.shields.io/nuget/v/Umbraco.Community.PropertyNavigator?logo=nuget&label=NuGet)](https://www.nuget.org/packages/Umbraco.Community.PropertyNavigator)
+[![Umbraco Marketplace](https://img.shields.io/badge/Umbraco-Marketplace-3544B1?logo=umbraco)](https://marketplace.umbraco.com/package/umbraco.community.propertynavigator)
+[![Umbraco 17](https://img.shields.io/badge/Umbraco-17-3544B1?logo=umbraco)](https://umbraco.com)
+[![Build](https://img.shields.io/github/actions/workflow/status/manutdkid77/Umbraco.Community.PropertyNavigator/build.yml?branch=main&logo=github&label=Build)](https://github.com/manutdkid77/Umbraco.Community.PropertyNavigator/actions/workflows/build.yml)
+[![License: MIT](https://img.shields.io/github/license/manutdkid77/Umbraco.Community.PropertyNavigator?label=License)](LICENSE)
 
-**Click the Content view** (top right) while you're already on it and a
-dropdown lists every field on the node — just like v13's Content app. Type to
-filter, click to jump straight to the field.
-
-**See it in action**
+Find and jump to any property on a content node, straight from the Content view.
 
 ![Property Navigator: opening the dropdown, filtering and jumping to a field](docs/screenshots/demo.gif)
 
-## Install
+## Features
 
-```
+Remember v13's Content app for jumping between fields? This brings it back to
+the Umbraco 17 backoffice.
+
+- **One click** — click the **Content** view (top right) while you're already on
+  it and a dropdown lists every field on the node.
+- **Filter as you type** — narrow a long document type down to the field you want.
+- **Jump straight there** — the editor scrolls to the field and briefly rings it
+  so your eye lands in the right place.
+- **Keyboard friendly** — open, filter, jump and close (Escape) without touching
+  the mouse.
+- **Optional aliases & descriptions** — show (and search) property aliases or
+  descriptions when that helps your editors.
+- **Zero setup** — install, restart, done. No build step, no config required.
+
+## Installation
+
+```bash
 dotnet add package Umbraco.Community.PropertyNavigator
 ```
 
@@ -21,13 +36,9 @@ Restart the site and open any content node.
 
 ## Configuration
 
-**Filter as you type**
-
-![Filtering the dropdown to a handful of matching fields](docs/screenshots/filter.png)
-
-All settings are optional. Anything you leave out uses its default below, and
-with no `Umbraco.Community.PropertyNavigator` section at all the package is
-simply on with the defaults. To change something, add to `appsettings.json`:
+All settings are optional. With no `Umbraco.Community.PropertyNavigator` section
+at all, the package is simply on with the defaults. To change something, add to
+`appsettings.json`:
 
 ```json
 "Umbraco.Community.PropertyNavigator": {
@@ -47,6 +58,20 @@ simply on with the defaults. To change something, add to `appsettings.json`:
 | `ShowAliases` | `false` | Show each field's property alias (for all users), and match it when filtering. |
 | `HighlightField` | `true` | Briefly draw a ring around the field after jumping to it. `false` just scrolls to it. |
 
+The filter always matches the field name, and only matches aliases /
+descriptions when they're shown. Changes apply on the next backoffice page load
+— no restart needed.
+
+## Screenshots
+
+**Filter as you type**
+
+![Filtering the dropdown to a handful of matching fields](docs/screenshots/filter.png)
+
+**Jump to a field, with a highlight ring**
+
+![The editor scrolled to a field, still showing the highlight ring after a jump](docs/screenshots/highlight.png)
+
 **With `ShowAliases` enabled**
 
 ![ShowAliases enabled: each field's property alias shown next to its name](docs/screenshots/aliases.png)
@@ -55,78 +80,21 @@ simply on with the defaults. To change something, add to `appsettings.json`:
 
 ![ShowDescriptions enabled: each field's description shown under its name](docs/screenshots/descriptions.png)
 
-The filter always matches the field name, and only matches aliases /
-descriptions when they're shown. Changes apply on the next backoffice page load
-— no restart needed.
-
-**Jump to a field, with a highlight ring**
-
-![The editor scrolled to a field, still showing the highlight ring after a jump](docs/screenshots/highlight.png)
-
-## Repository layout
-
-```
-src/
-├── Directory.Packages.props                       # central package versions (Umbraco 17.0.0 floor)
-├── Umbraco.Community.PropertyNavigator.slnx
-├── Umbraco.Community.PropertyNavigator/           # the package (Razor Class Library → NuGet)
-│   ├── Configuration/PropertyNavigatorOptions.cs  # the appsettings options
-│   ├── Controllers/PropertyNavigatorConfigController.cs  # exposes them to the backoffice
-│   ├── Composers/PropertyNavigatorComposer.cs     # options binding + Swagger doc
-│   └── wwwroot/App_Plugins/PropertyNavigator/     # the backoffice extension (no-build JS)
-└── Umbraco.Community.PropertyNavigator.TestSite/  # Umbraco 17.7 + Clean 7.0.8 starter kit, references the package
-docs/
-├── README_nuget.md                                # the README shown on NuGet
-├── icon.png / icon.svg                            # package icon (128px PNG packed; SVG is the source)
-├── screenshots/                                   # README / NuGet / Marketplace screenshots + demo GIF
-└── HOW-IT-WORKS.md                                # implementation notes + v17 gotchas
-umbraco-marketplace.json                           # Umbraco Marketplace listing metadata
-CHANGELOG.md                                       # release notes (linked from the NuGet package)
-.github/workflows/build.yml                        # PRs / main → build + pack check
-.github/workflows/release.yml                      # tag → pack → push to NuGet
-```
-
-Structure follows Lotte Pitcher's
-[Opinionated Package Starter](https://github.com/LottePitcher/opinionated-package-starter),
-except the client side stays as plain no-build JS (no Vite/TypeScript).
-
-## Developing
-
-Open `src/Umbraco.Community.PropertyNavigator.slnx` and run the **TestSite**
-(`https://localhost:44396/umbraco`). On first run it installs itself unattended
-(SQLite) with the Clean starter kit, and a local admin:
-
-- **Email:** `admin@example.com`
-- **Password:** `1234567890`
-
-These are throwaway credentials for the local test database only (set in
-`TestSite/appsettings.Development.json`, the same as `dotnet new umbraco
---friendly-name "Administrator" --email "admin@example.com" --password
-"1234567890"` generates) — never reuse them anywhere real.
-
-After the first run, per the Clean starter kit's setup steps: log in, **save and
-publish the Home page**, and **save one dictionary item** in the Translation
-section — the front end renders after that. (The backoffice, and so the
-navigator, works without it.)
-
-> **Why the full `Clean` package, not `Clean.Core`?** Clean's docs advise
-> switching to `Clean.Core` once a site is set up, so the build stops overwriting
-> your views/assets. That's right for a real site, but not for this test site:
-> Clean's content import lives in the `Clean` package, and the test database
-> isn't committed — so with `Clean.Core` a fresh clone would have no document
-> types or content to navigate. We never customise Clean's views here, so the
-> re-copy on build is harmless; its generated files are gitignored.
-
-The package's JS is served straight from its `wwwroot` via static web assets, so
-JS edits show up on a browser refresh (hard-refresh if cached); C# changes and
-`umbraco-package.json` changes need a restart.
-
-The package builds against the **minimum** supported Umbraco (17.0.0) via
-central package versions (`src/Directory.Packages.props`). The test site is
-straight from `dotnet new umbraco` (17.7.0) with the template's inline package
-versions, so its own `Directory.Packages.props` switches central versioning off
-for it.
-
 ## Compatibility
 
-Umbraco 17.
+| Umbraco | Package |
+|---|---|
+| 17.x | Supported (built against 17.0.0) |
+
+## Contributing
+
+Issues and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for how to run the
+package locally and submit changes.
+
+## Further reading
+
+- [Introducing Umbraco.Community.PropertyNavigator](https://www.nathanielnunes.com/blog/introducing-umbraco-community-propertynavigator): the story behind the package.
+
+## License
+
+[MIT](LICENSE) © Nathaniel Nunes
