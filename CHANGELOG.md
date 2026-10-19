@@ -67,7 +67,8 @@ First release, for Umbraco 17.
 - `appsettings.json` settings under `PropertyNavigator`: `Enabled`,
   `EnableSearch`, `ShowDescriptions`, `ShowAliases` and `HighlightField`.
 
-[Unreleased]: https://github.com/manutdkid77/Umbraco.Community.PropertyNavigator/compare/1.0.3...HEAD
+[Unreleased]: https://github.com/manutdkid77/Umbraco.Community.PropertyNavigator/compare/1.1.0...HEAD
+[1.1.0]: https://github.com/manutdkid77/Umbraco.Community.PropertyNavigator/compare/1.0.3...1.1.0
 [1.0.3]: https://github.com/manutdkid77/Umbraco.Community.PropertyNavigator/compare/1.0.2...1.0.3
 [1.0.2]: https://github.com/manutdkid77/Umbraco.Community.PropertyNavigator/compare/1.0.1...1.0.2
 [1.0.1]: https://github.com/manutdkid77/Umbraco.Community.PropertyNavigator/compare/1.0.0...1.0.1
