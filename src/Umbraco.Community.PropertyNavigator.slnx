@@ -1,4 +1,5 @@
 <Solution>
   <Project Path="Umbraco.Community.PropertyNavigator.TestSite/Umbraco.Community.PropertyNavigator.TestSite.csproj" />
+  <Project Path="Umbraco.Community.PropertyNavigator.TestSite.V18/Umbraco.Community.PropertyNavigator.TestSite.V18.csproj" />
   <Project Path="Umbraco.Community.PropertyNavigator/Umbraco.Community.PropertyNavigator.csproj" />
 </Solution>
