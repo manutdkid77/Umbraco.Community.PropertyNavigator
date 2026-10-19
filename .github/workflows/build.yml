@@ -23,8 +23,11 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
-      - name: Build test site (builds the package too)
+      - name: Build v17 test site (builds the package too)
         run: dotnet build src/Umbraco.Community.PropertyNavigator.TestSite/Umbraco.Community.PropertyNavigator.TestSite.csproj -c Release
+
+      - name: Build v18 test site
+        run: dotnet build src/Umbraco.Community.PropertyNavigator.TestSite.V18/Umbraco.Community.PropertyNavigator.TestSite.V18.csproj -c Release
 
       - name: Pack
         run: dotnet pack src/Umbraco.Community.PropertyNavigator/Umbraco.Community.PropertyNavigator.csproj -c Release -o artifacts

@@ -2,7 +2,7 @@
 
 [![NuGet version](https://img.shields.io/nuget/v/Umbraco.Community.PropertyNavigator?logo=nuget&label=NuGet)](https://www.nuget.org/packages/Umbraco.Community.PropertyNavigator)
 [![Umbraco Marketplace](https://img.shields.io/badge/Umbraco-Marketplace-3544B1?logo=umbraco)](https://marketplace.umbraco.com/package/umbraco.community.propertynavigator)
-[![Umbraco 17](https://img.shields.io/badge/Umbraco-17-3544B1?logo=umbraco)](https://umbraco.com)
+[![Umbraco 17 | 18](https://img.shields.io/badge/Umbraco-17%20%7C%2018-3544B1?logo=umbraco)](https://umbraco.com)
 [![Build](https://img.shields.io/github/actions/workflow/status/manutdkid77/Umbraco.Community.PropertyNavigator/build.yml?branch=main&logo=github&label=Build)](https://github.com/manutdkid77/Umbraco.Community.PropertyNavigator/actions/workflows/build.yml)
 [![License: MIT](https://img.shields.io/github/license/manutdkid77/Umbraco.Community.PropertyNavigator?label=License)](LICENSE)
 
@@ -12,19 +12,19 @@ Find and jump to any property on a content node, straight from the Content view.
 
 ## Features
 
-Remember v13's Content app for jumping between fields? This brings it back to
-the Umbraco 17 backoffice.
+Umbraco 13 had a Content app for jumping between fields. Property Navigator
+brings that back to the Umbraco 17 and 18 backoffice.
 
-- **One click** — click the **Content** view (top right) while you're already on
-  it and a dropdown lists every field on the node.
-- **Filter as you type** — narrow a long document type down to the field you want.
-- **Jump straight there** — the editor scrolls to the field and briefly rings it
-  so your eye lands in the right place.
-- **Keyboard friendly** — open, filter, jump and close (Escape) without touching
-  the mouse.
-- **Optional aliases & descriptions** — show (and search) property aliases or
-  descriptions when that helps your editors.
-- **Zero setup** — install, restart, done. No build step, no config required.
+- Click the **Content** view (top right) while you're already on it, and a
+  dropdown lists every field on the node.
+- Type to narrow a long document type down to the field you want.
+- Click a field and the editor scrolls to it, then briefly draws a ring around
+  it so you can spot it.
+- Open, filter, jump and close (Escape) from the keyboard if you prefer.
+- Optionally show property aliases or descriptions, and match them when
+  filtering.
+- There's no build step and no config to write. Install the package and restart
+  the site.
 
 ## Installation
 
@@ -58,9 +58,9 @@ at all, the package is simply on with the defaults. To change something, add to
 | `ShowAliases` | `false` | Show each field's property alias (for all users), and match it when filtering. |
 | `HighlightField` | `true` | Briefly draw a ring around the field after jumping to it. `false` just scrolls to it. |
 
-The filter always matches the field name, and only matches aliases /
+The filter always matches the field name, and only matches aliases or
 descriptions when they're shown. Changes apply on the next backoffice page load
-— no restart needed.
+without a restart.
 
 ## Screenshots
 
@@ -85,6 +85,7 @@ descriptions when they're shown. Changes apply on the next backoffice page load
 | Umbraco | Package |
 |---|---|
 | 17.x | Supported (built against 17.0.0) |
+| 18.x | Supported from 1.1.0 |
 
 ## Contributing
 

@@ -2,7 +2,7 @@
 
 Find and jump to any field on an Umbraco content node, without hunting through tabs.
 
-**Click the Content view** (top right) while you're already on it and a dropdown lists every field on the node — just like v13's Content app. Type to filter by name (and optionally alias / description), click a field — the editor switches to the right tab, scrolls to the field and briefly rings it. Works from the keyboard too: open, filter, jump and close (Escape) without touching the mouse.
+Click the **Content** view (top right) while you're already on it, and a dropdown lists every field on the node, much like v13's Content app. Type to filter by name (and optionally by alias or description), then click a field. The editor switches to the right tab, scrolls to the field and briefly draws a ring around it. You can also open, filter, jump and close (Escape) from the keyboard.
 
 **See it in action**
 
@@ -50,4 +50,4 @@ Changes apply on the next backoffice page load; no restart needed.
 
 ## Compatibility
 
-Umbraco 17.
+Umbraco 17 and 18 (18 from 1.1.0).

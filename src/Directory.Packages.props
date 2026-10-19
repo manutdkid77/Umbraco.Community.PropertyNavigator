@@ -5,11 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- Minimum supported versions for consumers (NuGet resolves up): keep at the lowest 17.x we support. -->
-    <PackageVersion Include="Umbraco.Cms.Api.Common" Version="17.0.0" />
-    <PackageVersion Include="Umbraco.Cms.Api.Management" Version="17.0.0" />
-    <PackageVersion Include="Umbraco.Cms.Web.Common" Version="17.0.0" />
-    <PackageVersion Include="Umbraco.Cms.Web.Website" Version="17.0.0" />
+    <!-- Supported range for consumers: built against the 17.0.0 floor, capped below 19 until it's retested there. -->
+    <PackageVersion Include="Umbraco.Cms.Api.Common" Version="[17.0.0, 19.0.0)" />
+    <PackageVersion Include="Umbraco.Cms.Api.Management" Version="[17.0.0, 19.0.0)" />
+    <PackageVersion Include="Umbraco.Cms.Web.Common" Version="[17.0.0, 19.0.0)" />
+    <PackageVersion Include="Umbraco.Cms.Web.Website" Version="[17.0.0, 19.0.0)" />
   </ItemGroup>
 
 </Project>

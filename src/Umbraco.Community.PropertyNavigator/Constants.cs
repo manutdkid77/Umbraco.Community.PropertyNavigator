@@ -2,7 +2,7 @@ namespace Umbraco.Community.PropertyNavigator;
 
 public static class Constants
 {
-    // Swagger document name and Management API route segment.
+    // Management API route segment and MapToApi name (no OpenAPI document is registered for it).
     public const string ApiName = "property-navigator";
 
     // appsettings section the options are bound from.

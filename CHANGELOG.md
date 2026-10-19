@@ -6,6 +6,24 @@ All notable changes to this package are documented here. The format follows
 
 ## [Unreleased]
 
+## [1.1.0]
+
+### Added
+
+- Umbraco 18 support. One package covers both 17 and 18; its Umbraco
+  dependency is now `[17.0.0, 19.0.0)`.
+
+### Changed
+
+- The config endpoint no longer has its own Swagger document. Umbraco 18
+  replaced Swashbuckle, and registering the document stopped 1.0.x loading
+  there. The endpoint itself is unchanged.
+
+### Note
+
+- 1.0.x had no upper Umbraco bound, so NuGet will still offer it to
+  Umbraco 18 sites, where it fails at startup. Use 1.1.0 or later on 18.
+
 ## [1.0.3]
 
 ### Fixed
@@ -45,7 +63,7 @@ First release, for Umbraco 17.
 ### Added
 
 - Click the active Content view on a content node for a dropdown of every
-  field on it — type to filter, click to jump straight to the field.
+  field on it. Type to filter, then click to jump straight to the field.
 - `appsettings.json` settings under `PropertyNavigator`: `Enabled`,
   `EnableSearch`, `ShowDescriptions`, `ShowAliases` and `HighlightField`.
 
