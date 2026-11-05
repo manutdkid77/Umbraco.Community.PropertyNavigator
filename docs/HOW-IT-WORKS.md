@@ -87,6 +87,13 @@ When a setting is off, that text is neither rendered nor matched by the filter,
 so a row never matches on text you can't see. This is display configuration and
 not a security boundary.
 
+The filter box's placeholder names the same fields ("Filter by name…",
+"Filter by name or alias…", "Filter by name, alias or description…") unless
+`SearchPlaceholder` is set. A custom placeholder is used as is
+(trimmed), whatever `ShowAliases` and `ShowDescriptions` say, so keeping its
+wording accurate is up to the site. Lit binds it as an attribute value, so the
+text is never parsed as HTML.
+
 `Enabled: false` is a kill switch, for example if an Umbraco update breaks the
 tab hook. The dropdown ignores Content-tab clicks, so the view behaves as stock
 Umbraco. It also ignores them until the config has loaded, so a disabled

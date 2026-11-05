@@ -22,7 +22,8 @@ All settings are optional. Anything you leave out uses its default below, and wi
   "EnableSearch": true,
   "ShowDescriptions": false,
   "ShowAliases": false,
-  "HighlightField": true
+  "HighlightField": true,
+  "SearchPlaceholder": ""
 }
 ```
 
@@ -33,6 +34,7 @@ All settings are optional. Anything you leave out uses its default below, and wi
 | `ShowDescriptions` | `false` | Show each field's description (and match it when filtering). |
 | `ShowAliases` | `false` | Show each field's property alias (and match it when filtering), for all users. |
 | `HighlightField` | `true` | Briefly draw a ring around the field after jumping to it. `false` just scrolls to it. |
+| `SearchPlaceholder` | `""` | Placeholder text for the filter box, e.g. `"Find a field"`. Empty uses the built-in text, which names the fields the filter matches: "Filter by name…" by default, or "Filter by name or alias…", "Filter by name or description…" and "Filter by name, alias or description…" as `ShowAliases` and `ShowDescriptions` are turned on. |
 
 **With `ShowAliases` enabled**
 

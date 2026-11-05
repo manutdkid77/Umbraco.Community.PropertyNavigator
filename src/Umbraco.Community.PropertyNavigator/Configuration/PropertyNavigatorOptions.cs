@@ -17,4 +17,7 @@ public class PropertyNavigatorOptions
 
     // Briefly draw a ring around the field after jumping to it.
     public bool HighlightField { get; set; } = true;
+
+    // Placeholder text for the filter box. Empty uses the built-in text, which names what the filter matches.
+    public string? SearchPlaceholder { get; set; }
 }

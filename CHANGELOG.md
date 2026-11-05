@@ -6,6 +6,15 @@ All notable changes to this package are documented here. The format follows
 
 ## [Unreleased]
 
+## [1.2.0]
+
+### Added
+
+- `SearchPlaceholder` setting for the filter box's placeholder text. Leave it
+  out or empty to keep the built-in text, which names the fields the filter
+  matches ("Filter by name…" by default, "Filter by name or alias…" with
+  `ShowAliases` on, and so on).
+
 ## [1.1.0]
 
 ### Added
@@ -67,7 +76,8 @@ First release, for Umbraco 17.
 - `appsettings.json` settings under `PropertyNavigator`: `Enabled`,
   `EnableSearch`, `ShowDescriptions`, `ShowAliases` and `HighlightField`.
 
-[Unreleased]: https://github.com/manutdkid77/Umbraco.Community.PropertyNavigator/compare/1.1.0...HEAD
+[Unreleased]: https://github.com/manutdkid77/Umbraco.Community.PropertyNavigator/compare/1.2.0...HEAD
+[1.2.0]: https://github.com/manutdkid77/Umbraco.Community.PropertyNavigator/compare/1.1.0...1.2.0
 [1.1.0]: https://github.com/manutdkid77/Umbraco.Community.PropertyNavigator/compare/1.0.3...1.1.0
 [1.0.3]: https://github.com/manutdkid77/Umbraco.Community.PropertyNavigator/compare/1.0.2...1.0.3
 [1.0.2]: https://github.com/manutdkid77/Umbraco.Community.PropertyNavigator/compare/1.0.1...1.0.2

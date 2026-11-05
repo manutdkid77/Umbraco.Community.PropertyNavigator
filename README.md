@@ -46,7 +46,8 @@ at all, the package is simply on with the defaults. To change something, add to
   "EnableSearch": true,
   "ShowDescriptions": false,
   "ShowAliases": false,
-  "HighlightField": true
+  "HighlightField": true,
+  "SearchPlaceholder": ""
 }
 ```
 
@@ -57,10 +58,23 @@ at all, the package is simply on with the defaults. To change something, add to
 | `ShowDescriptions` | `false` | Show each field's description, and match it when filtering. |
 | `ShowAliases` | `false` | Show each field's property alias (for all users), and match it when filtering. |
 | `HighlightField` | `true` | Briefly draw a ring around the field after jumping to it. `false` just scrolls to it. |
+| `SearchPlaceholder` | `""` | Placeholder text for the filter box, e.g. `"Find a field"`. Empty uses the built-in text (see below). |
 
 The filter always matches the field name, and only matches aliases or
 descriptions when they're shown. Changes apply on the next backoffice page load
 without a restart.
+
+Without a `SearchPlaceholder`, the filter box's placeholder names the fields the
+filter matches:
+
+| `ShowAliases` | `ShowDescriptions` | Placeholder |
+|---|---|---|
+| `false` | `false` | Filter by name… |
+| `true` | `false` | Filter by name or alias… |
+| `false` | `true` | Filter by name or description… |
+| `true` | `true` | Filter by name, alias or description… |
+
+A custom `SearchPlaceholder` is shown as is, whatever those two settings are.
 
 ## Screenshots
 
