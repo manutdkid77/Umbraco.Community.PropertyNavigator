@@ -361,15 +361,18 @@ export class PropertyNavigatorBase extends UmbLitElement {
     return parts;
   }
 
-  // The filter box; its placeholder names only what the filter can match with the current config.
+  // The filter box. Its placeholder is the SearchPlaceholder setting if set, otherwise it names
+  // only what the filter can match with the current config.
   #renderSearch() {
-    const { showAliases, showDescriptions } = this._config;
+    const { showAliases, showDescriptions, searchPlaceholder } = this._config;
     const fields = ["name", showAliases && "alias", showDescriptions && "description"]
       .filter(Boolean);
     const placeholder =
-      fields.length === 1
-        ? "Filter by name…"
-        : `Filter by ${fields.slice(0, -1).join(", ")} or ${fields.at(-1)}…`;
+      typeof searchPlaceholder === "string" && searchPlaceholder.trim()
+        ? searchPlaceholder.trim()
+        : fields.length === 1
+          ? "Filter by name…"
+          : `Filter by ${fields.slice(0, -1).join(", ")} or ${fields.at(-1)}…`;
     return html`
       <uui-input
         type="text"
