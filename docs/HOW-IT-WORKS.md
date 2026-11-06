@@ -215,6 +215,8 @@ clicking a field:
   scroll.
 - Use `workspaceFooterApp` to host a custom element. A `workspaceAction` is
   api-driven and builds its own button.
+- `umbraco-package.json` lists `core.js` and `config.js` in its `importmap`, mapped
+  to themselves, so Umbraco adds the package version to their URLs as well.
 
 ## Compatibility
 

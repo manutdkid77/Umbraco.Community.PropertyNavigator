@@ -3,6 +3,12 @@
   "id": "Umbraco.Community.PropertyNavigator",
   "name": "Umbraco.Community.PropertyNavigator",
   "version": "1.2.0",
+  "importmap": {
+    "imports": {
+      "/App_Plugins/PropertyNavigator/property-navigator-core.js": "/App_Plugins/PropertyNavigator/property-navigator-core.js",
+      "/App_Plugins/PropertyNavigator/property-navigator-config.js": "/App_Plugins/PropertyNavigator/property-navigator-config.js"
+    }
+  },
   "extensions": [
     {
       "type": "workspaceFooterApp",

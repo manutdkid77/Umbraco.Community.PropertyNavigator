@@ -37,6 +37,8 @@ All notable changes to this package are documented here. The format follows
   (e.g. one with block previews) now still scrolls to and highlights the field,
   instead of stopping at the tab. Scrolling, clicking, typing or starting
   another jump cancels the wait.
+- All of the package's scripts now load fresh for each new version on Umbraco
+  17.6+ and 18.1+.
 
 ## [1.1.0]
 
