@@ -63,8 +63,9 @@ at all, the package is simply on with the defaults. To change something, add to
 
 The filter always matches the field name, and only matches aliases or
 descriptions when they're shown. Press Enter to jump to the top match, which is
-shaded and marked "Enter" while you type, or use Tab to reach another
-result. Changes apply on the next backoffice page load without a restart.
+shaded and marked "Enter" while you type, or use Tab or the Up and Down arrows
+to reach another result. Changes apply on the next backoffice page load
+without a restart.
 
 Without a `SearchPlaceholder`, the filter box's placeholder names the fields the
 filter matches:

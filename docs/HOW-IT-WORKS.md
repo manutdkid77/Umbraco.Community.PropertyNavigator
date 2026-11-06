@@ -106,6 +106,12 @@ can't point across the shadow roots between the input and the rows. The status
 span is always rendered (empty when not filtering) so screen readers pick up
 changes to it.
 
+Up and Down move real focus (`#moveWithArrows` in the dropdown), unlike VS Code,
+where focus stays in the input and the highlight moves. Real focus means screen
+readers read each row and the browser scrolls it into view, with no selected-row
+state to keep in sync with the filter. Up in the search box is left alone so the
+text cursor behaves normally.
+
 Moving into the list (or onto the clear button) drops the marker, so the
 focus ring is never competing with a second "current" row. `_searchFocused`
 tracks this from `focusin`/`focusout` on the `uui-input`, counting only the

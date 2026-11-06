@@ -19,6 +19,8 @@ All notable changes to this package are documented here. The format follows
   shows an "Enter" hint, and screen readers hear the match count and which field
   Enter goes to. Tab still moves through the results, and the shading goes away
   once you do.
+- Up and Down arrows move between the search box and the results. Press Enter
+  on a result to jump to it.
 
 ### Fixed
 
