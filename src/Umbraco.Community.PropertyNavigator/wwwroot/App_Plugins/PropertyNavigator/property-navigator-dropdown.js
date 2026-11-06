@@ -121,6 +121,10 @@ export class PropertyNavigatorDropdownElement extends PropertyNavigatorBase {
       this.#focusTab(this.#anchor);
       return;
     }
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      this.#moveWithArrows(e);
+      return;
+    }
     if (e.key !== "Tab") return;
     const panel = this.#panel();
     const stops = [...panel.querySelectorAll("uui-input, uui-button, uui-menu-item")];
@@ -136,6 +140,35 @@ export class PropertyNavigatorDropdownElement extends PropertyNavigatorBase {
     this.#close();
     this.#focusTab(target);
   };
+
+  // Down from the search box enters the list, then both arrows step row by row; Up from the first row goes back to
+  // the search box. Moving real focus means screen readers read each row and the panel scrolls it into view itself.
+  #moveWithArrows(e) {
+    const panel = this.#panel();
+    const input = panel.querySelector("uui-input");
+    const rows = [...panel.querySelectorAll("uui-menu-item")];
+    const path = e.composedPath();
+    const down = e.key === "ArrowDown";
+
+    const index = rows.findIndex((row) => path.includes(row));
+    if (index === -1) {
+      // In the search box Up stays with the text cursor, as it does in any text field.
+      if (!down || !input || !path.includes(input) || !rows.length) return;
+      e.preventDefault();
+      this.#focusRow(rows[0]);
+      return;
+    }
+
+    e.preventDefault(); // otherwise the panel scrolls as well
+    const next = rows[index + (down ? 1 : -1)];
+    if (next) this.#focusRow(next);
+    else if (!down) input?.focus();
+  }
+
+  // uui-menu-item doesn't delegate focus either; the focusable part is the button in its shadow root.
+  #focusRow(row) {
+    (row.shadowRoot?.querySelector("#label-button") ?? row).focus();
+  }
 
   // uui-tab doesn't delegate focus; the focusable part is the link in its shadow root.
   #focusTab(tab) {
