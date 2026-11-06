@@ -22,6 +22,11 @@ All notable changes to this package are documented here. The format follows
 - Up and Down arrows move between the search box and the results. Press Enter
   on a result to jump to it.
 
+### Changed
+
+- Focused fields in the dropdown now show Umbraco's blue focus outline instead
+  of the browser's black one, matching the highlight ring after a jump.
+
 ### Fixed
 
 - The browser's autofill suggestions no longer drop down over the results while
