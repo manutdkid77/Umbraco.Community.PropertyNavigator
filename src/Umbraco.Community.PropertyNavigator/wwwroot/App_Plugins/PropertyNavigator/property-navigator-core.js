@@ -377,6 +377,7 @@ export class PropertyNavigatorBase extends UmbLitElement {
       <uui-input
         type="text"
         label="Filter properties"
+        autocomplete="off"
         placeholder=${placeholder}
         .value=${this._filter}
         @input=${this.#onSearch}
