@@ -47,7 +47,8 @@ function scrollToField(el) {
   const viewHeight =
     scroller === document.scrollingElement ? window.innerHeight : scroller.clientHeight;
   const block = el.getBoundingClientRect().height > viewHeight - RING_PADDING * 2 ? "start" : "center";
-  el.scrollIntoView({ behavior: "smooth", block });
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  el.scrollIntoView({ behavior: reduceMotion ? "instant" : "smooth", block });
 }
 
 // Fade a rounded ring in and out around the field we jumped to, padded but clamped inside its box.
