@@ -43,8 +43,9 @@ publish the Home page**, and **save one dictionary item** in the Translation
 section. The front end renders after that. (The backoffice, and so the
 navigator, works without it.)
 
-The package's JS is served straight from its `wwwroot` via static web assets, so
-JS edits show up on a browser refresh (hard-refresh if cached); C# changes and
+The package's JS is served straight from its `wwwroot` via static web assets.
+While working on JS, keep **Disable cache** ticked in the browser's DevTools
+Network tab, as a refresh alone can show old code. C# changes and
 `umbraco-package.json` changes need a restart.
 
 For implementation notes and v17/v18 gotchas, see [docs/HOW-IT-WORKS.md](docs/HOW-IT-WORKS.md).
