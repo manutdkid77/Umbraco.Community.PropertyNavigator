@@ -19,6 +19,8 @@ All notable changes to this package are documented here. The format follows
 
 - The browser's autofill suggestions no longer drop down over the results while
   you type in the filter box.
+- Jumping to a field respects the "reduce motion" system setting: the page moves
+  straight there instead of smooth scrolling.
 
 ## [1.1.0]
 
