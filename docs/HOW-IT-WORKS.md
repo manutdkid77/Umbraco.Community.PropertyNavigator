@@ -123,6 +123,11 @@ the filter only matches names, so it's always a name match. With
 Title, whose description mentions the page name, above Meta Name). The list
 isn't re-ranked, so the marked row is always the first one.
 
+Rows use `select-mode="highlight"`, which swaps the browser's black focus ring
+for UUI's own `--uui-color-focus` outline, the same colour as the highlight ring.
+They also set `--uui-show-focus-outline: 1`, because UUI hides that outline until
+Tab is pressed and arrow keys don't count.
+
 The keydown handler checks that the key came from the text field itself,
 because the clear button is slotted into the same `uui-input` and Enter there
 should clear, not jump.

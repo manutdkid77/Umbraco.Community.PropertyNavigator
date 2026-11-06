@@ -462,6 +462,7 @@ export class PropertyNavigatorBase extends UmbLitElement {
                   (p) => html`
                     <uui-menu-item
                       class=${p === top ? "top-match" : ""}
+                      select-mode="highlight"
                       label=${p.name}
                       @click-label=${() => this.#goToProperty(p)}
                     >
@@ -506,6 +507,9 @@ export class PropertyNavigatorBase extends UmbLitElement {
     }
     uui-menu-item {
       --uui-menu-item-flat-structure: 1; /* no caret column: the list is flat */
+      /* select-mode="highlight" swaps the browser's black focus ring for UUI's own. Keep it always on, because UUI
+         otherwise hides it until the Tab key is pressed, so arrow keys wouldn't show it. */
+      --uui-show-focus-outline: 1;
     }
     /* uui-menu-item keeps its label on one line; let long names and descriptions wrap instead. */
     .prop-label {
