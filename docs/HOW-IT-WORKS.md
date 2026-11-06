@@ -144,7 +144,10 @@ clicking a field:
 2. Navigates to `/view/content/tab/<name>` by clicking a synthetic `<a>`, which
    the router handles as an in-app switch without a reload.
 3. Polls for `umb-property[data-mark="property:<alias>"]` with a
-   shadow-piercing `deepQuery`, then calls `scrollIntoView` on it. A field that
+   shadow-piercing `deepQuery`, for up to about 5s because a tab of block
+   previews can take seconds to render. Scrolling, clicking, typing or starting
+   another jump cancels the wait, so a slow field can't pull the page away from
+   you. Once found, it calls `scrollIntoView` on the field. A field that
    fits the scroll area is centred. A taller one (e.g. a block list with
    previews) is top-aligned, so you land on its label instead of its middle.
    The scroll area is found by walking up the rendered tree through slots

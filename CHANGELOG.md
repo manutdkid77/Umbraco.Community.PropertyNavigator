@@ -21,6 +21,10 @@ All notable changes to this package are documented here. The format follows
   you type in the filter box.
 - Jumping to a field respects the "reduce motion" system setting: the page moves
   straight there instead of smooth scrolling.
+- Jumping to a field on a tab that takes more than about 2 seconds to render
+  (e.g. one with block previews) now still scrolls to and highlights the field,
+  instead of stopping at the tab. Scrolling, clicking, typing or starting
+  another jump cancels the wait.
 
 ## [1.1.0]
 

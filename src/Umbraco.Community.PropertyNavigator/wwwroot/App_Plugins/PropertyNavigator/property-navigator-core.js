@@ -308,38 +308,48 @@ export class PropertyNavigatorBase extends UmbLitElement {
 
     this._onNavigated();
 
-    // The tab renders its fields after navigating, so poll (every 50ms, up to ~2s) for the field.
+    // Waiting for the field and re-aligning it both end as soon as the user scrolls, clicks or types, or jumps again.
+    const USER_INPUT = ["wheel", "touchstart", "keydown", "pointerdown"];
+    let timers = [];
+    let polling;
+    const stop = () => {
+      clearTimeout(polling);
+      timers.forEach(clearTimeout);
+      USER_INPUT.forEach((type) => window.removeEventListener(type, stop, true));
+    };
+    this.#stopAligning = stop;
+    // Attach after this event loop turn so the keypress/click that triggered the jump doesn't count.
+    setTimeout(() => USER_INPUT.forEach((type) => window.addEventListener(type, stop, true)));
+
+    // The tab renders its fields after navigating, which can take seconds with block previews, so poll (every 50ms,
+    // up to ~5s) for the field.
     let tries = 0;
     const tick = () => {
       const found = deepQuery(selector);
       // Skip the pre-navigation element while it might still be swapped out (~500ms); after that it's the real one.
       const el = found && (found !== stale || tries >= 10) ? found : null;
       if (el) {
-        // Editors keep growing as they load, so re-align a few times, stopping as soon as the user scrolls or types.
-        const timers = [250, 600, 1200, 2000, 3000].map((ms) => setTimeout(() => scrollToField(el), ms));
-        const USER_INPUT = ["wheel", "touchstart", "keydown", "pointerdown"];
-        const stop = () => {
-          timers.forEach(clearTimeout);
-          USER_INPUT.forEach((type) => window.removeEventListener(type, stop, true));
-        };
-        this.#stopAligning = stop;
-        // Attach after this event loop turn so the keypress/click that triggered the jump doesn't count.
-        setTimeout(() => USER_INPUT.forEach((type) => window.addEventListener(type, stop, true)));
+        // Editors keep growing as they load, so re-align a few times.
+        timers = [250, 600, 1200, 2000, 3000].map((ms) => setTimeout(() => scrollToField(el), ms));
         setTimeout(stop, 3100);
         scrollToField(el);
         // The ring rides along with the field, so on the same tab show it straight away; after a tab switch,
         // wait for the fields to finish laying out.
         if (this._config.highlightField) {
-          setTimeout(() => flashProperty(el), onTargetTab ? 0 : 350);
+          timers.push(setTimeout(() => flashProperty(el), onTargetTab ? 0 : 350));
         }
         return;
       }
-      if (tries++ < 40) setTimeout(tick, 50);
-      else console.warn("[PropNav] could not find", selector);
+      if (tries++ < 100) {
+        polling = setTimeout(tick, 50);
+      } else {
+        stop();
+        console.warn("[PropNav] could not find", selector);
+      }
     };
     // Already on the tab: the field is there now. Otherwise give the tab a moment to start rendering.
     if (onTargetTab) tick();
-    else setTimeout(tick, 50);
+    else polling = setTimeout(tick, 50);
   }
 
   // Hook for subclasses, called right after a jump starts (the dropdown closes itself).
