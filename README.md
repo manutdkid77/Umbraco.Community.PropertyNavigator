@@ -20,7 +20,8 @@ brings that back to the Umbraco 17 and 18 backoffice.
 - Type to narrow a long document type down to the field you want.
 - Click a field and the editor scrolls to it, then briefly draws a ring around
   it so you can spot it.
-- Open, filter, jump and close (Escape) from the keyboard if you prefer.
+- Open, filter, jump and close (Escape) from the keyboard if you prefer. Enter
+  jumps to the top match, inspired by VS Code's command palette (Ctrl+Shift+P).
 - Optionally show property aliases or descriptions, and match them when
   filtering.
 - There's no build step and no config to write. Install the package and restart
@@ -61,8 +62,9 @@ at all, the package is simply on with the defaults. To change something, add to
 | `SearchPlaceholder` | `""` | Placeholder text for the filter box, e.g. `"Find a field"`. Empty uses the built-in text (see below). |
 
 The filter always matches the field name, and only matches aliases or
-descriptions when they're shown. Changes apply on the next backoffice page load
-without a restart.
+descriptions when they're shown. Press Enter to jump to the top match, which is
+shaded and marked "Enter" while you type, or use Tab to reach another
+result. Changes apply on the next backoffice page load without a restart.
 
 Without a `SearchPlaceholder`, the filter box's placeholder names the fields the
 filter matches:
