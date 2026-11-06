@@ -15,6 +15,11 @@ All notable changes to this package are documented here. The format follows
   matches ("Filter by name…" by default, "Filter by name or alias…" with
   `ShowAliases` on, and so on).
 
+### Fixed
+
+- The browser's autofill suggestions no longer drop down over the results while
+  you type in the filter box.
+
 ## [1.1.0]
 
 ### Added
