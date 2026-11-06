@@ -94,6 +94,33 @@ The filter box's placeholder names the same fields ("Filter by name…",
 wording accurate is up to the site. Lit binds it as an attribute value, so the
 text is never parsed as HTML.
 
+Enter in the filter box jumps to the top match, inspired by VS Code's command
+palette (Ctrl+Shift+P).
+While the filter has text and its text field has focus, that row gets the
+`top-match` class (a
+`--uui-color-surface-emphasis` background, since `--uui-color-current` is
+already the `<mark>` colour) and an `aria-hidden` "Enter" hint. A visually
+hidden `role="status"` span announces the match count and the target, because
+the hint itself is hidden from screen readers and `aria-activedescendant`
+can't point across the shadow roots between the input and the rows. The status
+span is always rendered (empty when not filtering) so screen readers pick up
+changes to it.
+
+Moving into the list (or onto the clear button) drops the marker, so the
+focus ring is never competing with a second "current" row. `_searchFocused`
+tracks this from `focusin`/`focusout` on the `uui-input`, counting only the
+inner `<input>`.
+
+The top match is the first row in tab order. With the default config
+the filter only matches names, so it's always a name match. With
+`ShowDescriptions` on, a description match can come first (e.g. "name" puts
+Title, whose description mentions the page name, above Meta Name). The list
+isn't re-ranked, so the marked row is always the first one.
+
+The keydown handler checks that the key came from the text field itself,
+because the clear button is slotted into the same `uui-input` and Enter there
+should clear, not jump.
+
 `Enabled: false` is a kill switch, for example if an Umbraco update breaks the
 tab hook. The dropdown ignores Content-tab clicks, so the view behaves as stock
 Umbraco. It also ignores them until the config has loaded, so a disabled

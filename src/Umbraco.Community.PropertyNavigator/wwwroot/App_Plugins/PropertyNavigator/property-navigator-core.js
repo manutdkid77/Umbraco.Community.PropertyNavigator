@@ -120,13 +120,15 @@ function flashProperty(el) {
 }
 
 export class PropertyNavigatorBase extends UmbLitElement {
-  // Reactive state (no-decorator @state()): the node's properties, filter text, its Tabs, and the appsettings config.
+  // Reactive state (no-decorator @state()): the node's properties, filter text, its Tabs, the appsettings config,
+  // and whether the filter's text field has focus (the Enter-target marker only shows while it does).
   static properties = {
     _properties: { state: true },
     _filter: { state: true },
     _tabs: { state: true },
     _groups: { state: true },
     _config: { state: true },
+    _searchFocused: { state: true },
   };
 
   #workspace; // the document workspace context, once consumed
@@ -137,6 +139,7 @@ export class PropertyNavigatorBase extends UmbLitElement {
 
     this._properties = [];
     this._filter = "";
+    this._searchFocused = false;
     this._tabs = [];
     this._groups = new Map();
     // Render with the defaults until the config (fetched once per page) arrives.
@@ -192,6 +195,25 @@ export class PropertyNavigatorBase extends UmbLitElement {
 
   #onSearch = (e) => {
     this._filter = (e.target.value ?? "").toLowerCase();
+  };
+
+  // Enter jumps to the top match (the row marked with the Enter hint), like VS Code's command palette.
+  // The clear button is slotted into the uui-input, so ignore keys that didn't come from the text field.
+  #onSearchKeyDown = (e) => {
+    if (e.key !== "Enter" || e.isComposing || !this._filter.trim()) return;
+    if (e.composedPath()[0]?.localName !== "input") return;
+    const top = this.#filtered()[0];
+    if (!top) return;
+    e.preventDefault();
+    this.#goToProperty(top);
+  };
+
+  // Only the text field counts: on the clear button (slotted into the same uui-input) Enter clears, not jumps.
+  #onSearchFocusIn = (e) => {
+    this._searchFocused = e.composedPath()[0]?.localName === "input";
+  };
+  #onSearchFocusOut = () => {
+    this._searchFocused = false;
   };
 
   // The clear button is removed once the filter is empty, so hand focus back to the box instead of losing it.
@@ -392,6 +414,9 @@ export class PropertyNavigatorBase extends UmbLitElement {
         placeholder=${placeholder}
         .value=${this._filter}
         @input=${this.#onSearch}
+        @keydown=${this.#onSearchKeyDown}
+        @focusin=${this.#onSearchFocusIn}
+        @focusout=${this.#onSearchFocusOut}
         style="width: 100%; margin-bottom: var(--uui-size-6);"
       >
         <uui-icon name="search" slot="prepend" class="search-icon"></uui-icon>
@@ -414,8 +439,19 @@ export class PropertyNavigatorBase extends UmbLitElement {
   renderNavigator() {
     const { enableSearch, showAliases, showDescriptions } = this._config;
     const groups = this.#groups();
+    // While typing in the filter, the first row is what Enter jumps to: mark it, and say so to screen readers.
+    // Once focus moves into the list, the focus ring is the only marker, so there's never two "current" rows.
+    const filtering = enableSearch && this._searchFocused && this._filter.trim() !== "";
+    const top = filtering ? groups[0]?.items[0] : undefined;
+    const count = groups.reduce((n, g) => n + g.items.length, 0);
+    const status = !filtering
+      ? ""
+      : top
+        ? `${count} ${count === 1 ? "match" : "matches"}. Press Enter to go to ${top.name}.`
+        : "No matching properties.";
     return html`
       ${enableSearch ? this.#renderSearch() : ""}
+      <span class="visually-hidden" role="status">${status}</span>
       ${groups.length === 0
         ? html`<p>No matching properties.</p>`
         : groups.map(
@@ -425,10 +461,14 @@ export class PropertyNavigatorBase extends UmbLitElement {
                 ${g.items.map(
                   (p) => html`
                     <uui-menu-item
+                      class=${p === top ? "top-match" : ""}
                       label=${p.name}
                       @click-label=${() => this.#goToProperty(p)}
                     >
                       <span slot="label" class="prop-label">
+                        ${p === top
+                          ? html`<kbd class="enter-hint" aria-hidden="true">Enter</kbd>`
+                          : ""}
                         <span class="prop-line">
                           <strong>${this.#highlight(p.name)}</strong>
                           ${showAliases
@@ -494,6 +534,33 @@ export class PropertyNavigatorBase extends UmbLitElement {
     .search-icon {
       padding-left: var(--uui-size-space-3);
       color: var(--uui-color-text-alt);
+    }
+    /* The row Enter jumps to while filtering. Not --uui-color-current: that's the <mark> colour. */
+    uui-menu-item.top-match {
+      background: var(--uui-color-surface-emphasis);
+      border-radius: var(--uui-border-radius);
+    }
+    .enter-hint {
+      float: right;
+      margin-left: var(--uui-size-space-3);
+      padding: 0 var(--uui-size-space-2);
+      font-family: inherit;
+      font-size: var(--uui-size-3);
+      line-height: 1.6;
+      color: var(--uui-color-text-alt);
+      border: 1px solid var(--uui-color-border);
+      border-radius: var(--uui-border-radius);
+    }
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      padding: 0;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+      border: 0;
     }
   `;
 }

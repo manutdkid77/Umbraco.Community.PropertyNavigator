@@ -14,6 +14,11 @@ All notable changes to this package are documented here. The format follows
   out or empty to keep the built-in text, which names the fields the filter
   matches ("Filter by name…" by default, "Filter by name or alias…" with
   `ShowAliases` on, and so on).
+- Press Enter in the filter box to jump to the top match, inspired by VS Code's
+  command palette (Ctrl+Shift+P). While you type, the top row is shaded and
+  shows an "Enter" hint, and screen readers hear the match count and which field
+  Enter goes to. Tab still moves through the results, and the shading goes away
+  once you do.
 
 ### Fixed
 
